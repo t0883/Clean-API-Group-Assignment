@@ -21,7 +21,7 @@ jobs:
         run: dotnet format
 
       - name: Check the format of code
-        run: dotnet format ./Clean-API.sln --verbosity diagnostic --verify-no-changes
+        run: dotnet format ./Clean-API-Groupassignment.sln --verbosity diagnostic --verify-no-changes
 
       - name: Restore dependencies
         run: dotnet restore --disable-parallel
