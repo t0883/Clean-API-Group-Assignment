@@ -1,0 +1,9 @@
+﻿using Domain.Models.Brands;
+
+namespace Infrastructure.Repository.Brands
+{
+    public interface IBrandRepository
+    {
+        Task<Brand> AddBrand(Brand brand);
+    }
+}
