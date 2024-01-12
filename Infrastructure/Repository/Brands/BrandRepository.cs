@@ -20,19 +20,14 @@ namespace Infrastructure.Repository.Brands
 
                 await _sqlServer.SaveChangesAsync();
 
-
                 return await Task.FromResult(result.Entity);
+
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw new ArgumentException(ex.Message);
+                throw new ArgumentException($"An error occured while adding {brand.BrandName}. Please check if {brand.BrandName} doesnt already exist in the database.");
             }
-
-
-
         }
-
         public async Task<List<Brand>> GetAllBrands()
         {
             try
