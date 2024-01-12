@@ -1,5 +1,6 @@
 ﻿using Application.Commands.Brands.AddBrand;
 using Application.Dtos;
+using Application.Queries.Brands.GetAll;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +27,13 @@ namespace API.Controllers.BrandsController
 
             return Ok(await _mediator.Send(new AddBrandCommand(brand)));
 
+        }
 
+        [HttpGet]
+        [Route("getAllBrands")]
+        public async Task<IActionResult> GetAllBrands()
+        {
+            return Ok(await _mediator.Send(new GetAllBrandsQuery()));
         }
     }
 }
