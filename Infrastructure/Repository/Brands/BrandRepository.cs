@@ -28,6 +28,26 @@ namespace Infrastructure.Repository.Brands
                 throw new ArgumentException($"An error occured while adding {brand.BrandName}. Please check if {brand.BrandName} doesnt already exist in the database.");
             }
         }
+
+        public async Task<Brand> DeleteBrandByName(string brandName)
+        {
+            try
+            {
+                Brand brandToRemove = await _sqlServer.Brands.Where(b => b.BrandName == brandName).FirstOrDefaultAsync();
+
+                var result = _sqlServer.Brands.Remove(brandToRemove);
+
+                await _sqlServer.SaveChangesAsync();
+
+                return await Task.FromResult(result.Entity);
+            }
+            catch (Exception ex)
+            {
+
+                throw new ArgumentException(ex.Message);
+            }
+        }
+
         public async Task<List<Brand>> GetAllBrands()
         {
             try

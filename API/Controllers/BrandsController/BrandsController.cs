@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Brands.AddBrand;
+using Application.Commands.Brands.DeleteBrand;
 using Application.Commands.Brands.UpdateBrand;
 using Application.Dtos;
 using Application.Queries.Brands.GetAll;
@@ -51,6 +52,15 @@ namespace API.Controllers.BrandsController
         public async Task<IActionResult> UpdateBrandById([FromBody] Brand brandToUpdate)
         {
             return Ok(await _mediator.Send(new UpdateBrandByIdCommand(brandToUpdate)));
+        }
+
+        [HttpDelete]
+        [Route("deleteBrandByName/{brandName}")]
+        public async Task<IActionResult> DeleteBrandByName(string brandName)
+        {
+            await _mediator.Send(new DeleteBrandByNameCommand(brandName));
+
+            return NoContent();
         }
     }
 }
