@@ -1,7 +1,9 @@
 ﻿using Application.Commands.Brands.AddBrand;
+using Application.Commands.Brands.UpdateBrand;
 using Application.Dtos;
 using Application.Queries.Brands.GetAll;
 using Application.Queries.Brands.GetByName;
+using Domain.Models.Brands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,6 +44,13 @@ namespace API.Controllers.BrandsController
         public async Task<IActionResult> GetBrandByName(string brandName)
         {
             return Ok(await _mediator.Send(new GetBrandByNameQuery(brandName)));
+        }
+
+        [HttpPut]
+        [Route("updateBrandById")]
+        public async Task<IActionResult> UpdateBrandById([FromBody] Brand brandToUpdate)
+        {
+            return Ok(await _mediator.Send(new UpdateBrandByIdCommand(brandToUpdate)));
         }
     }
 }

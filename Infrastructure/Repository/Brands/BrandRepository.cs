@@ -53,5 +53,26 @@ namespace Infrastructure.Repository.Brands
                 throw new ArgumentException(ex.Message);
             }
         }
+
+        public async Task<Brand> UpdateBrandById(Brand brandToUpdate)
+        {
+            try
+            {
+                Brand brandInDatabase = await _sqlServer.Brands.Where(b => b.BrandId == brandToUpdate.BrandId).FirstOrDefaultAsync();
+
+                if (brandInDatabase.BrandName != brandToUpdate.BrandName) { brandInDatabase.BrandName = brandToUpdate.BrandName; }
+
+                var result = _sqlServer.Brands.Update(brandInDatabase);
+
+                _sqlServer.SaveChanges();
+
+                return await Task.FromResult(result.Entity);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
     }
 }
