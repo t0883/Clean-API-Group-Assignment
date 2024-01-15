@@ -40,5 +40,18 @@ namespace Infrastructure.Repository.Brands
                 throw new ArgumentException(ex.Message);
             }
         }
+
+        public async Task<Brand> GetBrandByName(string brandName)
+        {
+            try
+            {
+                return await Task.FromResult(await _sqlServer.Brands.Where(b => b.BrandName == brandName).FirstOrDefaultAsync());
+            }
+            catch (Exception ex)
+            {
+
+                throw new ArgumentException(ex.Message);
+            }
+        }
     }
 }
