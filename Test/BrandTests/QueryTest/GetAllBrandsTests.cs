@@ -19,7 +19,7 @@ namespace Test.BrandTests.QueryTest
 
             var queryHandler = new GetAllBrandsQueryHandler(testRepository);
 
-            A.CallTo(() => testRepository.GetAllBrands()).Returns(new List<Brand> { new Brand { BrandId = new Guid(), BrandName = "test1" }, new Brand { BrandId = new Guid(), BrandName = "test2" }, new Brand { BrandId = new Guid(), BrandName = "test3" } });
+            A.CallTo(() => testRepository.GetAllBrands()).Returns(new List<Brand> { new Brand { BrandId = Guid.NewGuid(), BrandName = "test1" }, new Brand { BrandId = Guid.NewGuid(), BrandName = "test2" }, new Brand { BrandId = Guid.NewGuid(), BrandName = "test3" } });
 
             //Act
 
