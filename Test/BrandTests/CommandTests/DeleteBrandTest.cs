@@ -21,7 +21,7 @@ namespace Test.BrandTests.CommandTests
 
             var commandHandler = new DeleteBrandByNameCommandHandler(testRepository);
 
-            A.CallTo(() => testRepository.DeleteBrandByName(A<string>._)).Returns(new Brand { BrandId = new Guid(), BrandName = brandName });
+            A.CallTo(() => testRepository.DeleteBrandByName(A<string>._)).Returns(new Brand { BrandId = Guid.NewGuid(), BrandName = brandName });
 
             //Act
 

@@ -20,7 +20,7 @@ namespace Test.BrandTests.QueryTest
 
             var commandHandler = new GetBrandByNameQueryHandler(testRepository);
 
-            A.CallTo(() => testRepository.GetBrandByName(A<string>._)).Returns(new Brand { BrandId = new Guid(), BrandName = brandName });
+            A.CallTo(() => testRepository.GetBrandByName(A<string>._)).Returns(new Brand { BrandId = Guid.NewGuid(), BrandName = brandName });
 
             //Act
 

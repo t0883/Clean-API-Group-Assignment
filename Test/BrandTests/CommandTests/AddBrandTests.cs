@@ -24,7 +24,7 @@ namespace Test.BrandTests.CommandTests
 
             var commandHandler = new AddBrandCommandHandler(testRepository);
 
-            A.CallTo(() => testRepository.AddBrand(A<Brand>._)).Returns(new Brand { BrandId = new Guid(), BrandName = "test" });
+            A.CallTo(() => testRepository.AddBrand(A<Brand>._)).Returns(new Brand { BrandId = Guid.NewGuid(), BrandName = "test" });
 
             //Act
 
