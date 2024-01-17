@@ -12,7 +12,7 @@ namespace API
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            var connectionString = builder.Configuration.GetConnectionString("DatabaseConncetion");
+            var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
 
 
             // Add services to the container.
