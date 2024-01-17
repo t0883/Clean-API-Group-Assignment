@@ -12,20 +12,20 @@ namespace API
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            var connectionString = builder.Configuration.GetConnectionString("DatabaseConncetion");
-
+            var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
 
             // Add services to the container.
-            builder.Services.AddDbContext<SqlServer>(option =>
+            builder.Services.AddDbContext<SqlServer>(options =>
             {
-                option.UseSqlServer(connectionString, b => b.MigrationsAssembly("Infrastructure"));
+                options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Infrastructure"));
             });
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddApplication().AddInfrastructure();
+
+            builder.Services.AddScoped<Infrastructure.Repository.Engines.Interface.IEngineRepository, Infrastructure.Repository.Engines.EngineRepository>();
 
             var app = builder.Build();
 
@@ -38,12 +38,15 @@ namespace API
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            // Add this line to configure routing.
+            app.UseRouting();
 
+            app.UseAuthorization();
 
             app.MapControllers();
 
             app.Run();
+
         }
     }
 }

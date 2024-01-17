@@ -27,9 +27,6 @@ namespace Infrastructure.Repository.Brands
 
                 throw new ArgumentException(ex.Message);
             }
-
-
-
         }
     }
 }

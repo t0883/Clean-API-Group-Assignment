@@ -25,8 +25,6 @@ namespace API.Controllers.BrandsController
             }
 
             return Ok(await _mediator.Send(new AddBrandCommand(brand)));
-
-
         }
     }
 }

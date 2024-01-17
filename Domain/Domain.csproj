@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Models\Engines\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\Engines\" />
+  </ItemGroup>
 </Project>
