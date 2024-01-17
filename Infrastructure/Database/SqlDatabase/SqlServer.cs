@@ -1,6 +1,7 @@
 ﻿using Domain.Models.Brands;
 using Domain.Models.Gearboxes;
 using Domain.Models.Users;
+using Domain.Models.Tires;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -19,6 +20,8 @@ namespace Infrastructure.Database.SqlDatabase
         public virtual DbSet<Gearbox> GearBoxes { get; set; }
 
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Tire> Tires { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

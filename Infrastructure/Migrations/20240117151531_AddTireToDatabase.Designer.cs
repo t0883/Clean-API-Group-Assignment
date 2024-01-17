@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SqlServer))]
-    [Migration("20240117135916_AddTireToDatabase")]
+    [Migration("20240117151531_AddTireToDatabase")]
     partial class AddTireToDatabase
     {
         /// <inheritdoc />
@@ -66,7 +66,74 @@ namespace Infrastructure.Migrations
                     b.ToTable("GearBoxes");
                 });
 
+            modelBuilder.Entity("Domain.Models.Tires.Tire", b =>
+                {
+                    b.Property<Guid>("TireId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BrandId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TireModel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TireSize")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TireTreadDepth")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("TireId");
+
+                    b.HasIndex("BrandId");
+
+                    b.ToTable("Tires");
+                });
+
+            modelBuilder.Entity("Domain.Models.Users.User", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("Domain.Models.Gearboxes.Gearbox", b =>
+                {
+                    b.HasOne("Domain.Models.Brands.Brand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+                });
+
+            modelBuilder.Entity("Domain.Models.Tires.Tire", b =>
                 {
                     b.HasOne("Domain.Models.Brands.Brand", "Brand")
                         .WithMany()
