@@ -1,4 +1,5 @@
 ﻿using Domain.Models.Brands;
+using Domain.Models.Engines;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -14,6 +15,7 @@ namespace Infrastructure.Database.SqlDatabase
         }
 
         public virtual DbSet<Brand> Brands { get; set; }
+        public virtual DbSet<Engine> Engines{ get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

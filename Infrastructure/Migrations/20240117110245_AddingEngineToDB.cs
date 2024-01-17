@@ -6,21 +6,22 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddingBrandToDatabase : Migration
+    public partial class AddingEngineToDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Brands",
+                name: "Engines",
                 columns: table => new
                 {
-                    BrandId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BrandName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    EngineId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EngineFuel = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HorsePower = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Brands", x => x.BrandId);
+                    table.PrimaryKey("PK_Engines", x => x.EngineId);
                 });
         }
 
@@ -28,7 +29,7 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Brands");
+                name: "Engines");
         }
     }
 }

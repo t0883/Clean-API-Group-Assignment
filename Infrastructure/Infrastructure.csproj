@@ -21,4 +21,12 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Repository\Engines\" />
+    <None Remove="Repository\Engines\Interface\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Repository\Engines\" />
+    <Folder Include="Repository\Engines\Interface\" />
+  </ItemGroup>
 </Project>

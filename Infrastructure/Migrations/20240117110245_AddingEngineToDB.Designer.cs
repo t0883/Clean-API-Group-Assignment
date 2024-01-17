@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SqlServer))]
-    [Migration("20240109100037_AddingBrandToDatabase")]
-    partial class AddingBrandToDatabase
+    [Migration("20240117110245_AddingEngineToDB")]
+    partial class AddingEngineToDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -33,11 +33,32 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("BrandName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("BrandId");
 
+                    b.HasIndex("BrandName")
+                        .IsUnique();
+
                     b.ToTable("Brands");
+                });
+
+            modelBuilder.Entity("Domain.Models.Engines.Engine", b =>
+                {
+                    b.Property<Guid>("EngineId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EngineFuel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HorsePower")
+                        .HasColumnType("int");
+
+                    b.HasKey("EngineId");
+
+                    b.ToTable("Engines");
                 });
 #pragma warning restore 612, 618
         }
