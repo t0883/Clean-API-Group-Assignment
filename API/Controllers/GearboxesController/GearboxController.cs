@@ -7,6 +7,6 @@ namespace API.Controllers.GearboxesController
     [ApiController]
     public class GearboxController : ControllerBase
     {
-        
+
     }
 }
