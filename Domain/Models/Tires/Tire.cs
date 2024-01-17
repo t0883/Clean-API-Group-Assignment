@@ -8,10 +8,10 @@ namespace Domain.Models.Tires
         public Guid TireId { get; set; }
         public required string TireModel { get; set; }
         public Brand Brand { get; set; }
-        public required string TireSize { get; set; } 
+        public required string TireSize { get; set; }
         public decimal TireTreadDepth { get; set; }
 
-        
+
 
     }
 }
