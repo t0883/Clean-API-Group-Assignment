@@ -1,9 +1,9 @@
 ﻿using Domain.Models.Engines;
-using Infrastructure.Repository.Engines; 
+using Infrastructure.Repository.Engines.Interface;
 using MediatR;
 
 namespace Application.Commands.Engines.AddEngine
-{/*
+{
     public class AddEngineCommandHandler : IRequestHandler<AddEngineCommand, Engine>
     {
         private readonly IEngineRepository _engineRepository;
@@ -22,5 +22,4 @@ namespace Application.Commands.Engines.AddEngine
             return await Task.FromResult(result);
         }
     }
-    */
 }

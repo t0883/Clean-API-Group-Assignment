@@ -20,6 +20,14 @@ namespace Infrastructure.Database.SqlDatabase
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DatabaseConnection"));
+
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Brand>().HasIndex(x => x.BrandName).IsUnique();
         }
     }
 }

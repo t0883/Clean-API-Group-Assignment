@@ -7,9 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Models\Engines\" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\Engines\" />
-  </ItemGroup>
+
 </Project>

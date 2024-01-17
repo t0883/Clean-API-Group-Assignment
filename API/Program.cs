@@ -25,8 +25,6 @@ namespace API
 
             builder.Services.AddApplication().AddInfrastructure();
 
-            builder.Services.AddScoped<Infrastructure.Repository.Engines.Interface.IEngineRepository, Infrastructure.Repository.Engines.EngineRepository>();
-
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

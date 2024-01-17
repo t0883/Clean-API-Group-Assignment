@@ -1,9 +1,9 @@
-﻿using MediatR;
+﻿using Domain.Models.Engines;
 using Infrastructure.Repository.Engines.Interface;
-using Domain.Models.Engines;
+using MediatR;
 
 namespace Application.Commands.Engines.DeleteEngine
-{/*
+{
     public class DeleteEngineCommandHandler : IRequestHandler<DeleteEngineCommand, Engine>
     {
         private readonly IEngineRepository _engineRepository;
@@ -19,5 +19,4 @@ namespace Application.Commands.Engines.DeleteEngine
             return await Task.FromResult(result);
         }
     }
-    */
 }
