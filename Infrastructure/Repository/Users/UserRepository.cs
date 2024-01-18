@@ -1,5 +1,6 @@
 ﻿using Domain.Models.Users;
 using Infrastructure.Database.SqlDatabase;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository.Users
 {
@@ -24,6 +25,18 @@ namespace Infrastructure.Repository.Users
             catch (Exception)
             {
                 throw new ArgumentException($"An error occured while adding {user.Username}. Please check if {user.Username} doesnt already exist in the database.");
+            }
+        }
+
+        public async Task<List<User>> GetAllUsers()
+        {
+            try
+            {
+                return await Task.FromResult(await _sqlServer.Users.ToListAsync());
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
             }
         }
     }
