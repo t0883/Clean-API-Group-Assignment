@@ -15,7 +15,7 @@ namespace Application.Commands.Engines.UpdateEngine
 
         public async Task<Engine> Handle(UpdateEngineCommand request, CancellationToken cancellationToken)
         {
-            Engine engineToUpdate = new Engine { EngineId = request.Id, EngineFuel = request.EngineFuel, HorsePower = request.HorsePower };
+            Engine engineToUpdate = new Engine { EngineId = request.Id, EngineName = request.EngineName, EngineFuel = request.EngineFuel, HorsePower = request.HorsePower };
 
             var result = await _engineRepository.UpdateEngine(engineToUpdate);
 

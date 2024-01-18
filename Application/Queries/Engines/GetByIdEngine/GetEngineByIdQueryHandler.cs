@@ -16,7 +16,7 @@ namespace Application.Commands.Engines.QuerieEngine.GetByIdEngine
 
         public async Task<Engine> Handle(GetEngineByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _engineRepository.GetEngineById(request.EngineFuel, request.HorsePower);
+            return await _engineRepository.GetEngineById(request.EngineFuel, request.EngineName, request.HorsePower);
         }
     }
 }

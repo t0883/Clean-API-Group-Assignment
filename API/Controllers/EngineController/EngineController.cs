@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Application.Commands.Engines.Queries.GetAll;
 using Application.Commands.Engines.QuerieEngine.GetByIdEngine;
+using Azure.Core;
 
 namespace API.Controllers.EnginesController
 {
@@ -45,9 +46,9 @@ namespace API.Controllers.EnginesController
 
         [HttpGet]
         [Route("getEngineById")]
-        public async Task<IActionResult> GetEngineById(string engineFuel, int horsePower)
+        public async Task<IActionResult> GetEngineById(string engineFuel, string engineName, int horsePower)
         {
-            return Ok(await _mediator.Send(new GetEngineByIdQuery(engineFuel, horsePower)));
+            return Ok(await _mediator.Send(new GetEngineByIdQuery(engineName, engineFuel, horsePower)));
         }
 
         [HttpPut]
@@ -59,9 +60,9 @@ namespace API.Controllers.EnginesController
 
         [HttpDelete]
         [Route("deleteEngine")]
-        public async Task<IActionResult> DeleteEngine(string engineFuel, int horsePower)
+        public async Task<IActionResult> DeleteEngine(string engineName, string engineFuel, int horsePower)
         {
-            await _mediator.Send(new DeleteEngineCommand(engineFuel, horsePower));
+            await _mediator.Send(new DeleteEngineCommand(engineName, engineFuel, horsePower));
             return NoContent();
         }
     }

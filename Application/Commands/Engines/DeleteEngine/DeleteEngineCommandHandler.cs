@@ -3,7 +3,7 @@ using Infrastructure.Repository.Engines.Interface;
 using Domain.Models.Engines;
 
 namespace Application.Commands.Engines.DeleteEngine
-{/*
+{
     public class DeleteEngineCommandHandler : IRequestHandler<DeleteEngineCommand, Engine>
     {
         private readonly IEngineRepository _engineRepository;
@@ -15,9 +15,8 @@ namespace Application.Commands.Engines.DeleteEngine
 
         public async Task<Engine> Handle(DeleteEngineCommand request, CancellationToken cancellationToken)
         {
-            var result = await _engineRepository.DeleteEngine(request.EngineFuel, request.HorsePower);
+            var result = await _engineRepository.DeleteEngine(request.EngineFuel, request.EngineName, request.HorsePower);
             return await Task.FromResult(result);
         }
     }
-    */
 }

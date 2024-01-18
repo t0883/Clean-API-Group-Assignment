@@ -27,15 +27,15 @@ namespace Infrastructure.Repository.Engines
             }
             catch (Exception)
             {
-                throw new ArgumentException($"An error occured while adding {engine.EngineFuel}. Please check if {engine.EngineFuel} doesnt already exist in the database.");
+                throw new ArgumentException($"An error occured");
             }
         }
 
-        public async Task<Engine> DeleteEngine(string engineFuel, int horsePower)
+        public async Task<Engine> DeleteEngine(string engineName, string engineFuel, int horsePower)
         {
             try
             {
-                Engine engineToRemove = await _sqlServer.Engines.Where(b => b.EngineFuel == engineFuel && b.HorsePower == horsePower).FirstOrDefaultAsync();
+                Engine engineToRemove = await _sqlServer.Engines.Where(b => b.EngineFuel == engineFuel && b.HorsePower == horsePower && b.EngineName == engineName).FirstOrDefaultAsync();
 
                 var result = _sqlServer.Engines.Remove(engineToRemove);
 
@@ -63,11 +63,11 @@ namespace Infrastructure.Repository.Engines
             }
         }
 
-        public async Task<Engine> GetEngineById(string EngineFuel, int HorsePower)
+        public async Task<Engine> GetEngineById(string engineName, string engineFuel, int horsePower)
         {
             try
             {
-                return await Task.FromResult(await _sqlServer.Engines.Where(b => b.EngineFuel == EngineFuel && b.HorsePower == HorsePower).FirstOrDefaultAsync());
+                return await Task.FromResult(await _sqlServer.Engines.Where(b => b.EngineFuel == engineFuel && b.HorsePower == horsePower && b.EngineName == engineName).FirstOrDefaultAsync());
             }
             catch (Exception ex)
             {
@@ -81,6 +81,8 @@ namespace Infrastructure.Repository.Engines
             try
             {
                 Engine engineInDatabase = await _sqlServer.Engines.Where(b => b.EngineId == engineToUpdate.EngineId).FirstOrDefaultAsync();
+
+                if (engineInDatabase.EngineName != engineToUpdate.EngineName) { engineInDatabase.EngineName = engineToUpdate.EngineName; }
 
                 if (engineInDatabase.EngineFuel != engineToUpdate.EngineFuel) { engineInDatabase.EngineFuel = engineToUpdate.EngineFuel; }
 
