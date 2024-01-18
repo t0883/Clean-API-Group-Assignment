@@ -41,5 +41,17 @@ namespace Infrastructure.Repository.Gearboxes
                 throw new ArgumentException(ex.Message);
             }
         }
+
+        public async Task<Gearbox?> GetGearboxById(Guid id)
+        {
+            try
+            {
+                return await Task.FromResult(await _sqlServer.GearBoxes.Where(g => g.GearboxId == id).FirstOrDefaultAsync());
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+        }
     }
 }
