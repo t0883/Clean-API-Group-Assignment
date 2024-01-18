@@ -1,5 +1,6 @@
 ﻿using Application.Commands.Gearboxes.AddGearbox;
 using Application.Dtos;
+using Application.Queries.Gearboxes.GetAll;
 using Domain.Models.Gearboxes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,13 @@ namespace API.Controllers.GearboxesController
                 // Return error response if something goes wrong
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet]
+        [Route("getAllGearboxess")]
+        public async Task<IActionResult> GetAllGearboxess()
+        {
+            return Ok(await _mediator.Send(new GetAllGearboxesQuery()));
         }
     }
 }
