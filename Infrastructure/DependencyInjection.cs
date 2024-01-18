@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Repository.Brands;
+using Infrastructure.Repository.Gearboxes;
 using Infrastructure.Repository.Users;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,7 @@ namespace Infrastructure
         {
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IGearboxRepository, GearboxRepository>();
 
             return services;
         }
