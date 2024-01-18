@@ -31,11 +31,11 @@ namespace Infrastructure.Repository.Engines
             }
         }
 
-        public async Task<Engine> DeleteEngine(string engineName, string engineFuel, int horsePower)
+        public async Task<Engine> DeleteEngine(Guid EngineId)
         {
             try
             {
-                Engine engineToRemove = await _sqlServer.Engines.Where(b => b.EngineFuel == engineFuel && b.HorsePower == horsePower && b.EngineName == engineName).FirstOrDefaultAsync();
+                Engine engineToRemove = await _sqlServer.Engines.Where(b => b.EngineId == EngineId).FirstOrDefaultAsync();
 
                 var result = _sqlServer.Engines.Remove(engineToRemove);
 

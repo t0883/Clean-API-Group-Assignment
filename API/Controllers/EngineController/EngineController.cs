@@ -60,9 +60,9 @@ namespace API.Controllers.EnginesController
 
         [HttpDelete]
         [Route("deleteEngine")]
-        public async Task<IActionResult> DeleteEngine(string engineName, string engineFuel, int horsePower)
+        public async Task<IActionResult> DeleteEngine(Guid EngineId)
         {
-            await _mediator.Send(new DeleteEngineCommand(engineName, engineFuel, horsePower));
+            await _mediator.Send(new DeleteEngineCommand(EngineId));
             return NoContent();
         }
     }

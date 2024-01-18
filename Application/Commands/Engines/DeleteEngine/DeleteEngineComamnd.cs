@@ -5,15 +5,11 @@ namespace Application.Commands.Engines.DeleteEngine
 {
     public class DeleteEngineCommand : IRequest<Engine>
     {
-        public DeleteEngineCommand(string engineName, string engineFuel, int horsePower)
+        public DeleteEngineCommand(Guid engineId)
         {
-            EngineName = engineName;
-            EngineFuel = engineFuel;
-            HorsePower = horsePower;
+            EngineId = engineId;
         }
 
-        public string EngineName { get; }
-        public string EngineFuel { get; }
-        public int HorsePower { get; }
+        public Guid EngineId { get; }
     }
 }

@@ -7,13 +7,13 @@ namespace Application.Commands.Engines.UpdateEngine
     {
         public UpdateEngineCommand(Engine engineToUpdate)
         {
-            Id = engineToUpdate.EngineId;
+            EngineId = engineToUpdate.EngineId;
             EngineName = engineToUpdate.EngineName;
             EngineFuel = engineToUpdate.EngineFuel;
             HorsePower = engineToUpdate.HorsePower;
         }
 
-        public Guid Id { get; }
+        public Guid EngineId { get; }
         public string EngineName { get; }
         public int HorsePower { get; }
         public string EngineFuel { get; }

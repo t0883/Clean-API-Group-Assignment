@@ -15,7 +15,7 @@ namespace Application.Commands.Engines.DeleteEngine
 
         public async Task<Engine> Handle(DeleteEngineCommand request, CancellationToken cancellationToken)
         {
-            var result = await _engineRepository.DeleteEngine(request.EngineFuel, request.EngineName, request.HorsePower);
+            var result = await _engineRepository.DeleteEngine(request.EngineId);
             return await Task.FromResult(result);
         }
     }
