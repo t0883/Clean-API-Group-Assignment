@@ -63,11 +63,11 @@ namespace Infrastructure.Repository.Engines
             }
         }
 
-        public async Task<Engine> GetEngineById(string engineName, string engineFuel, int horsePower)
+        public async Task<Engine> GetEngineById(Guid EngineId)
         {
             try
             {
-                return await Task.FromResult(await _sqlServer.Engines.Where(b => b.EngineFuel == engineFuel && b.HorsePower == horsePower && b.EngineName == engineName).FirstOrDefaultAsync());
+                return await Task.FromResult(await _sqlServer.Engines.Where(b => b.EngineId == EngineId).FirstOrDefaultAsync());
             }
             catch (Exception ex)
             {

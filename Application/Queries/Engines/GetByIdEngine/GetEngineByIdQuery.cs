@@ -5,15 +5,11 @@ namespace Application.Commands.Engines.QuerieEngine.GetByIdEngine
 {
     public class GetEngineByIdQuery : IRequest<Engine>
     {
-        public GetEngineByIdQuery(string engineName, string engineFuel, int horsePower)
+        public GetEngineByIdQuery(Guid engineId)
         {
-            EngineName = engineName;
-            EngineFuel = engineFuel;
-            HorsePower = horsePower;
+            EngineId = engineId;
         }
 
-        public string EngineName { get; }
-        public string EngineFuel { get; }
-        public int HorsePower { get; }
+        public Guid EngineId { get; }
     }
 }

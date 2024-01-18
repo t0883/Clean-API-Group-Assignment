@@ -46,9 +46,9 @@ namespace API.Controllers.EnginesController
 
         [HttpGet]
         [Route("getEngineById")]
-        public async Task<IActionResult> GetEngineById(string engineFuel, string engineName, int horsePower)
+        public async Task<IActionResult> GetEngineById(Guid EngineId)
         {
-            return Ok(await _mediator.Send(new GetEngineByIdQuery(engineName, engineFuel, horsePower)));
+            return Ok(await _mediator.Send(new GetEngineByIdQuery(EngineId)));
         }
 
         [HttpPut]
