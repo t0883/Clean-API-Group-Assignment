@@ -1,0 +1,31 @@
+﻿using Domain.Models.Gearboxes;
+using Infrastructure.Database.SqlDatabase;
+
+namespace Infrastructure.Repository.Gearboxes
+{
+    public class GearboxRepository : IGearboxRepository
+    {
+        private readonly SqlServer _sqlServer;
+        public GearboxRepository(SqlServer sqlServer)
+        {
+            _sqlServer = sqlServer;
+        }
+
+        public async Task<Gearbox> AddGearbox(Gearbox gearbox)
+        {
+            try
+            {
+                var result = _sqlServer.GearBoxes.Add(gearbox);
+
+                await _sqlServer.SaveChangesAsync();
+
+                return await Task.FromResult(result.Entity);
+            }
+            catch (Exception ex)
+            {
+
+                throw new ArgumentException(ex.Message);
+            }
+        }
+    }
+}
