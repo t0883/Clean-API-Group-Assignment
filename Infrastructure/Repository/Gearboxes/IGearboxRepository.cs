@@ -7,5 +7,6 @@ namespace Infrastructure.Repository.Gearboxes
         Task<Gearbox> AddGearbox(Gearbox gearbox);
         Task<List<Gearbox>> GetAllGearboxes();
         Task<Gearbox?> GetGearboxById(Guid id);
+        Task<Gearbox> UpdateGearboxById(Gearbox gearboxToUpdate);
     }
 }

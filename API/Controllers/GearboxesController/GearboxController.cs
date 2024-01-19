@@ -1,7 +1,10 @@
-﻿using Application.Commands.Gearboxes.AddGearbox;
+﻿using Application.Commands.Brands.UpdateBrand;
+using Application.Commands.Gearboxes.AddGearbox;
+using Application.Commands.Gearboxes.UpdateGearbox;
 using Application.Dtos;
 using Application.Queries.Gearboxes.GetAll;
 using Application.Queries.Gearboxes.GetById;
+using Domain.Models.Brands;
 using Domain.Models.Gearboxes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +52,16 @@ namespace API.Controllers.GearboxesController
         public async Task<IActionResult> GetGearboxById(Guid gearboxId)
         {
             return Ok(await _mediator.Send(new GetGearboxByIdQuery(gearboxId)));
+        }
+
+        [HttpPut]
+        [Route("updateGearboxById")]
+        [ProducesResponseType(typeof(Gearbox), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateGearboxById([FromBody] Gearbox gearboxToUpdate)
+        {
+            return Ok(await _mediator.Send(new UpdateGearboxByIdCommand(gearboxToUpdate)));
         }
     }
 }

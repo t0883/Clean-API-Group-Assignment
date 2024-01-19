@@ -69,5 +69,27 @@ namespace Infrastructure.Repository.Gearboxes
                 throw new ArgumentException(ex.Message);
             }
         }
+
+        public async Task<Gearbox> UpdateGearboxById(Gearbox gearbox)
+        {
+            try
+            {
+                Gearbox existingGearbox = await _sqlServer.GearBoxes
+                    .Where(g => g.GearboxId == gearbox.GearboxId)
+                    .FirstOrDefaultAsync() ?? throw new ArgumentException("Gearbox not found.");
+
+                existingGearbox.GearboxModel = gearbox.GearboxModel;
+                existingGearbox.Brand = gearbox.Brand;
+                existingGearbox.SixGears = gearbox.SixGears;
+
+                await _sqlServer.SaveChangesAsync();
+
+                return await Task.FromResult(existingGearbox);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+        }
     }
 }
