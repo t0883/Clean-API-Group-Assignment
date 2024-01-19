@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Users.AddUser;
+using Application.Commands.Users.DeleteUser;
 using Application.Dtos;
 using Application.Queries.Users.GetAll;
 using MediatR;
@@ -31,5 +32,13 @@ namespace API.Controllers.UsersController
             return Ok(await _mediator.Send(new GetAllUsersQuery()));
         }
 
+        [HttpDelete]
+        [Route("deleteUserByEmail")]
+        public async Task<IActionResult> DeleteUserByEmail([FromBody] UserDto userDto)
+        {
+            await _mediator.Send(new DeleteUserCommand(userDto));
+
+            return NoContent();
+        }
     }
 }

@@ -28,6 +28,30 @@ namespace Infrastructure.Repository.Users
             }
         }
 
+        public async Task<User> DeleteUserByEmail(User user)
+        {
+            try
+            {
+                User userToDelete = await _sqlServer.Users.Where(u => u.Email == user.Email).FirstOrDefaultAsync();
+
+                if (userToDelete == null)
+                {
+                    throw new ArgumentException($"There is no user with {user.Email} in the database");
+                }
+
+                var result = _sqlServer.Users.Remove(userToDelete);
+
+                await _sqlServer.SaveChangesAsync();
+
+                return await Task.FromResult(result.Entity);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<List<User>> GetAllUsers()
         {
             try
