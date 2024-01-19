@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Users.AddUser;
+using Application.Commands.Users.DeleteUser;
 using Application.Commands.Users.UpdateUser;
 using Application.Dtos;
 using Application.Queries.Users.GetAll;
@@ -36,6 +37,14 @@ namespace API.Controllers.UsersController
             return Ok(await _mediator.Send(new GetAllUsersQuery()));
         }
 
+        [HttpDelete]
+        [Route("deleteUserByEmail")]
+        public async Task<IActionResult> DeleteUserByEmail([FromBody] UserDto userDto)
+        {
+            await _mediator.Send(new DeleteUserCommand(userDto));
+
+            return NoContent();
+        }
         [HttpPut]
         [Route("updateUserByEmail")]
         public async Task<IActionResult> UpdateUserByEmail([FromBody] UserDto userDto)
@@ -47,6 +56,5 @@ namespace API.Controllers.UsersController
 
             return Ok(await _mediator.Send(new UpdateUserCommand(userDto)));
         }
-
     }
 }
