@@ -2,6 +2,7 @@
 using Domain.Models.Gearboxes;
 using Domain.Models.Users;
 using Domain.Models.Tires;
+using Domain.Models.Engines;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -17,6 +18,7 @@ namespace Infrastructure.Database.SqlDatabase
         }
 
         public virtual DbSet<Brand> Brands { get; set; }
+        public virtual DbSet<Engine> Engines { get; set; }
         public virtual DbSet<Gearbox> GearBoxes { get; set; }
 
         public virtual DbSet<User> Users { get; set; }
