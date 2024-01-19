@@ -91,5 +91,28 @@ namespace Infrastructure.Repository.Gearboxes
                 throw new ArgumentException(ex.Message);
             }
         }
+
+        public async Task<Gearbox> DeleteGearbox(Gearbox gearbox)
+        {
+            _sqlServer.GearBoxes.Remove(gearbox);
+            await _sqlServer.SaveChangesAsync();
+            return gearbox;
+
+            //try
+            //{
+            //    Gearbox gearboxToRemove = await _sqlServer.GearBoxes.Where(g => g.GearboxId == id).FirstOrDefaultAsync();
+
+            //    var result = _sqlServer.GearBoxes.Remove(gearboxToRemove);
+
+            //    await _sqlServer.SaveChangesAsync();
+
+            //    return await Task.FromResult(result.Entity);
+            //}
+            //catch (Exception ex)
+            //{
+
+            //    throw new ArgumentException(ex.Message);
+            //}
+        }
     }
 }

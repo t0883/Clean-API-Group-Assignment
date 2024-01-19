@@ -1,12 +1,15 @@
 ﻿using Application.Commands.Brands.UpdateBrand;
 using Application.Commands.Gearboxes.AddGearbox;
+using Application.Commands.Gearboxes.DeleteGearbox;
 using Application.Commands.Gearboxes.UpdateGearbox;
+using Application.Commands.Tires.DeleteTire;
 using Application.Dtos;
 using Application.Queries.Gearboxes.GetAll;
 using Application.Queries.Gearboxes.GetById;
 using Domain.Models.Brands;
 using Domain.Models.Gearboxes;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.GearboxesController
@@ -62,6 +65,20 @@ namespace API.Controllers.GearboxesController
         public async Task<IActionResult> UpdateGearboxById([FromBody] Gearbox gearboxToUpdate)
         {
             return Ok(await _mediator.Send(new UpdateGearboxByIdCommand(gearboxToUpdate)));
+        }
+
+        [HttpDelete]
+        [Route("deleteGearboxById/{gearboxId}")]
+        public async Task<IActionResult> DeletegearboxById(Guid gearboxId)
+        {
+            var deletedGearbox = await _mediator.Send(new DeleteGearboxByIdCommand(gearboxId));
+
+            if (deletedGearbox == null)
+            {
+                return NotFound($"Bird with ID {gearboxId} not found.");
+            }
+
+            return Ok(deletedGearbox);
         }
     }
 }
