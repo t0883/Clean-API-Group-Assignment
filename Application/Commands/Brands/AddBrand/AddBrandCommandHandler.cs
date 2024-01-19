@@ -15,7 +15,7 @@ namespace Application.Commands.Brands.AddBrand
 
         public async Task<Brand> Handle(AddBrandCommand request, CancellationToken cancellationToken)
         {
-            Brand brandToCreate = new Brand { BrandId = new Guid(), BrandName = request.NewBrand.BrandName };
+            Brand brandToCreate = new Brand { BrandId = Guid.NewGuid(), BrandName = request.NewBrand.BrandName };
 
             var result = await _brandRepository.AddBrand(brandToCreate);
 
