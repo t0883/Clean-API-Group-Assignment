@@ -63,5 +63,33 @@ namespace Infrastructure.Repository.Users
                 throw new ArgumentException(ex.Message);
             }
         }
+
+        public async Task<User> UpdateUser(User user)
+        {
+            try
+            {
+                var UserToUpdate = await _sqlServer.Users.Where(e => e.Email == user.Email).FirstOrDefaultAsync();
+
+                if (UserToUpdate == null)
+                {
+                    throw new ArgumentException($"There is no user with email {user.Email} in the database");
+                }
+
+                UserToUpdate.Username = user.Username;
+                UserToUpdate.Password = user.Password;
+                UserToUpdate.Email = user.Email;
+
+                _sqlServer.Users.Update(UserToUpdate);
+
+                _sqlServer.SaveChanges();
+
+                return await Task.FromResult(UserToUpdate);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

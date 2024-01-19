@@ -1,5 +1,6 @@
 ﻿using Application.Commands.Users.AddUser;
 using Application.Commands.Users.DeleteUser;
+using Application.Commands.Users.UpdateUser;
 using Application.Dtos;
 using Application.Queries.Users.GetAll;
 using MediatR;
@@ -22,6 +23,10 @@ namespace API.Controllers.UsersController
         [Route("addNewUser")]
         public async Task<IActionResult> AddUser([FromBody] UserDto userDto)
         {
+            if (!userDto.Email.Contains("@"))
+            {
+                return BadRequest();
+            }
             return Ok(await _mediator.Send(new AddUserCommand(userDto)));
         }
 
@@ -39,6 +44,17 @@ namespace API.Controllers.UsersController
             await _mediator.Send(new DeleteUserCommand(userDto));
 
             return NoContent();
+        }
+        [HttpPut]
+        [Route("updateUserByEmail")]
+        public async Task<IActionResult> UpdateUserByEmail([FromBody] UserDto userDto)
+        {
+            if (!userDto.Email.Contains("@"))
+            {
+                return BadRequest();
+            }
+
+            return Ok(await _mediator.Send(new UpdateUserCommand(userDto)));
         }
     }
 }

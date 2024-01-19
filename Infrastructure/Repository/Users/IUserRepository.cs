@@ -7,5 +7,6 @@ namespace Infrastructure.Repository.Users
         Task<User> AddUser(User user);
         Task<List<User>> GetAllUsers();
         Task<User> DeleteUserByEmail(User user);
+        Task<User> UpdateUser(User user);
     }
 }
