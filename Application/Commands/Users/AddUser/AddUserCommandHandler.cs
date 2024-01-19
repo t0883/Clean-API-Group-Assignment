@@ -15,9 +15,9 @@ namespace Application.Commands.Users.AddUser
 
         public async Task<User> Handle(AddUserCommand request, CancellationToken cancellationToken)
         {
-            string hashedPassowrd = BCrypt.Net.BCrypt.HashPassword(request.NewUser.Password);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.NewUser.Password);
 
-            User userToCreate = new User { UserId = Guid.NewGuid(), Username = request.NewUser.Username, Email = request.NewUser.Email, Password = hashedPassowrd };
+            User userToCreate = new User { UserId = Guid.NewGuid(), Username = request.NewUser.Username, Email = request.NewUser.Email, Password = hashedPassword };
 
             await _userRepository.AddUser(userToCreate);
 
