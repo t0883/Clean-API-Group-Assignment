@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Commands.Engines.UpdateEngine
 {
-	public class UpdateEngineCommand : IRequest<Engine>
+    public class UpdateEngineCommand : IRequest<Engine>
     {
         public UpdateEngineCommand(Engine engineToUpdate)
         {
@@ -17,6 +17,6 @@ namespace Application.Commands.Engines.UpdateEngine
         public string EngineName { get; }
         public int HorsePower { get; }
         public string EngineFuel { get; }
-	}
+    }
 }
 

@@ -18,7 +18,7 @@ namespace Infrastructure.Database.SqlDatabase
         }
 
         public virtual DbSet<Brand> Brands { get; set; }
-        public virtual DbSet<Engine> Engines{ get; set; }
+        public virtual DbSet<Engine> Engines { get; set; }
         public virtual DbSet<Gearbox> GearBoxes { get; set; }
 
         public virtual DbSet<User> Users { get; set; }

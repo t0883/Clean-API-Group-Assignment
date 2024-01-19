@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Commands.Engines.UpdateEngine
 {
-	public class UpdateEngineCommandHandler : IRequestHandler<UpdateEngineCommand, Engine>
+    public class UpdateEngineCommandHandler : IRequestHandler<UpdateEngineCommand, Engine>
     {
         private readonly IEngineRepository _engineRepository;
 
