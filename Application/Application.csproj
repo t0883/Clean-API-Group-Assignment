@@ -17,4 +17,22 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Commands\Engines\" />
+    <None Remove="Commands\Engines\DeleteEngine\" />
+    <None Remove="Commands\Engines\UpdateEngine\" />
+    <None Remove="Queries\" />
+    <None Remove="Queries\Engines\" />
+    <None Remove="Queries\Engines\GetAllEngine\" />
+    <None Remove="Queries\Engines\GetByIdEngine\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Commands\Engines\" />
+    <Folder Include="Commands\Engines\DeleteEngine\" />
+    <Folder Include="Commands\Engines\UpdateEngine\" />
+    <Folder Include="Queries\" />
+    <Folder Include="Queries\Engines\" />
+    <Folder Include="Queries\Engines\GetAllEngine\" />
+    <Folder Include="Queries\Engines\GetByIdEngine\" />
+  </ItemGroup>
 </Project>
