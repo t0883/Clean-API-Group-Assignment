@@ -21,11 +21,4 @@
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Controllers\EngineController\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\EngineController\" />
-  </ItemGroup>
 </Project>
