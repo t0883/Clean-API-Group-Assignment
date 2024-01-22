@@ -4,6 +4,7 @@ using Application.Commands.Brands.UpdateBrand;
 using Application.Dtos;
 using Application.Queries.Brands.GetAll;
 using Application.Queries.Brands.GetByName;
+using Application.Validator.GuidValidation;
 using Domain.Models.Brands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -15,9 +16,11 @@ namespace API.Controllers.BrandsController
     public class BrandsController : ControllerBase
     {
         internal readonly IMediator _mediator;
-        public BrandsController(IMediator mediator)
+        internal readonly GuidValidator _guidValidator;
+        public BrandsController(IMediator mediator, GuidValidator guidValidator)
         {
             _mediator = mediator;
+            _guidValidator = guidValidator;
         }
 
         [HttpPost]
@@ -51,7 +54,21 @@ namespace API.Controllers.BrandsController
         [Route("updateBrandById")]
         public async Task<IActionResult> UpdateBrandById([FromBody] Brand brandToUpdate)
         {
-            return Ok(await _mediator.Send(new UpdateBrandByIdCommand(brandToUpdate)));
+            try
+            {
+                var validatedBrand = _guidValidator.Validate(brandToUpdate.BrandId);
+
+                if (!validatedBrand.IsValid)
+                {
+                    return BadRequest(validatedBrand.Errors.ConvertAll(errors => errors.ErrorMessage));
+                }
+
+                return Ok(await _mediator.Send(new UpdateBrandByIdCommand(brandToUpdate)));
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
         }
 
         [HttpDelete]
