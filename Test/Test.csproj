@@ -27,8 +27,10 @@
 
   <ItemGroup>
     <None Remove="EngineTests\" />
+    <None Remove="EngineTests\CommandTests\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="EngineTests\" />
+    <Folder Include="EngineTests\CommandTests\" />
   </ItemGroup>
 </Project>
