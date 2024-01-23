@@ -23,6 +23,13 @@ namespace Infrastructure.Repository.Users
                     throw new Exception("An emailadress is registered to another user. Please try another emailadress.");
                 }
 
+                bool uniqueUsername = await IsUserNameUnique(user);
+
+                if (!uniqueUsername)
+                {
+                    throw new Exception("A username is already in use");
+                }
+
                 var result = _sqlServer.Users.Add(user);
 
                 await _sqlServer.SaveChangesAsync();
@@ -81,6 +88,19 @@ namespace Infrastructure.Repository.Users
             {
 
                 throw new ArgumentException($"An error occured while getting {user.Email}", ex.Message);
+            }
+        }
+
+        public async Task<bool> IsUserNameUnique(User user)
+        {
+            try
+            {
+                return !await _sqlServer.Users.AnyAsync(Users => Users.Username == user.Username);
+            }
+            catch (Exception ex)
+            {
+
+                throw new ArgumentException($"An error occured while getting {user.Username}", ex.Message);
             }
         }
 
