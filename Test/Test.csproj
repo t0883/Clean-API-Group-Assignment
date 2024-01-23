@@ -25,4 +25,10 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="EngineTests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="EngineTests\" />
+  </ItemGroup>
 </Project>
