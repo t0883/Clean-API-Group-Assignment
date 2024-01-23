@@ -9,5 +9,6 @@ namespace Infrastructure.Repository.Users
         Task<User> DeleteUserByEmail(User user);
         Task<User> UpdateUser(User user);
         Task<bool> IsEmailUnique(User user);
+        Task<bool> IsUserNameUnique(User user);
     }
 }
