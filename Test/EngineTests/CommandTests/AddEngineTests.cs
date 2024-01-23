@@ -1,5 +1,5 @@
-﻿using Domain.Models.Engines;
-using FakeItEasy;
+﻿using FakeItEasy;
+using Domain.Models.Engines;
 using Infrastructure.Repository.Engines.Interface;
 using Application.Commands.Engines.AddEngine;
 using Application.Dtos;
@@ -12,7 +12,7 @@ namespace Test.EngineTests.CommandTest.AddEngineTests
         [Test]
         public async Task Add_Engine_Test()
         {
-            //Arrange
+            // Arrange
             EngineDto engineDto = new EngineDto
             {
                 EngineFuel = "Gasoline",
@@ -35,14 +35,14 @@ namespace Test.EngineTests.CommandTest.AddEngineTests
                     EngineName = "TestEngine"
                 });
 
-            //Act
+            // Act
             var result = await commandHandler.Handle(command, CancellationToken.None);
 
-            //Assert
+            // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(engineDto.EngineFuel, result.EngineFuel);
-            Assert.AreEqual(engineDto.HorsePower, result.HorsePower);
-            Assert.AreEqual(engineDto.EngineName, result.EngineName);
+            Assert.That(result.EngineFuel, Is.EqualTo(engineDto.EngineFuel));
+            Assert.That(result.HorsePower, Is.EqualTo(engineDto.HorsePower));
+            Assert.That(result.EngineName, Is.EqualTo(engineDto.EngineName));
             Assert.That(result, Is.TypeOf<Engine>());
         }
     }
