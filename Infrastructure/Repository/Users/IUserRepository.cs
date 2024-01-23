@@ -8,5 +8,6 @@ namespace Infrastructure.Repository.Users
         Task<List<User>> GetAllUsers();
         Task<User> DeleteUserByEmail(User user);
         Task<User> UpdateUser(User user);
+        Task<bool> IsEmailUnique(User user);
     }
 }
