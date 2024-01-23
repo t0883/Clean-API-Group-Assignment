@@ -1,7 +1,11 @@
-﻿using Application.Commands.Engines.QuerieEngine.GetByIdEngine;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Application.Commands.Engines.QuerieEngine.GetByIdEngine;
 using Domain.Models.Engines;
 using FakeItEasy;
 using Infrastructure.Repository.Engines.Interface;
+using NUnit.Framework;
 
 namespace Test.EngineTests.QueryTests
 {
@@ -11,12 +15,12 @@ namespace Test.EngineTests.QueryTests
         [Test]
         public async Task Get_Engine_By_Id_Test()
         {
-            //Arrange
+            // Arrange
             Guid engineId = Guid.NewGuid();
 
             var testRepository = A.Fake<IEngineRepository>();
 
-            var query = new GetEngineByIdQuery(engineId);
+            var query = new Application.Commands.Engines.QuerieEngine.GetByIdEngine.GetEngineByIdQuery(engineId);
 
             var queryHandler = new GetEngineByIdQueryHandler(testRepository);
 
@@ -24,10 +28,10 @@ namespace Test.EngineTests.QueryTests
 
             A.CallTo(() => testRepository.GetEngineById(A<Guid>._)).Returns(expectedEngine);
 
-            //Act
+            // Act
             var result = await queryHandler.Handle(query, CancellationToken.None);
 
-            //Assert
+            // Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(expectedEngine.EngineId, result.EngineId);
             Assert.That(result, Is.TypeOf<Engine>());
