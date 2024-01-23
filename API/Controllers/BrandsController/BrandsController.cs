@@ -5,6 +5,7 @@ using Application.Dtos;
 using Application.Queries.Brands.GetAll;
 using Application.Queries.Brands.GetByName;
 using Application.Validator.GuidValidation;
+using Application.Validator.StringValidation;
 using Domain.Models.Brands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -17,19 +18,23 @@ namespace API.Controllers.BrandsController
     {
         internal readonly IMediator _mediator;
         internal readonly GuidValidator _guidValidator;
-        public BrandsController(IMediator mediator, GuidValidator guidValidator)
+        internal readonly StringValidator _stringValidator;
+        public BrandsController(IMediator mediator, GuidValidator guidValidator, StringValidator stringValidator)
         {
             _mediator = mediator;
             _guidValidator = guidValidator;
+            _stringValidator = stringValidator;
         }
 
         [HttpPost]
         [Route("addNewBrand")]
         public async Task<IActionResult> AddBrand([FromBody] BrandDto brand)
         {
-            if (brand == null || brand.BrandName == "string")
+            var validatedBrand = _stringValidator.Validate(brand.BrandName);
+
+            if (!validatedBrand.IsValid)
             {
-                return BadRequest();
+                return BadRequest(validatedBrand.Errors.ConvertAll(errors => errors.ErrorMessage));
             }
 
             return Ok(await _mediator.Send(new AddBrandCommand(brand)));
