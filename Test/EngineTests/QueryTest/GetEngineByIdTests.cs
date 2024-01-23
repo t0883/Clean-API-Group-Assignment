@@ -1,11 +1,7 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Commands.Engines.QuerieEngine.GetByIdEngine;
+﻿using Application.Commands.Engines.QuerieEngine.GetByIdEngine;
 using Domain.Models.Engines;
 using FakeItEasy;
 using Infrastructure.Repository.Engines.Interface;
-using NUnit.Framework;
 
 namespace Test.EngineTests.QueryTests
 {
@@ -20,20 +16,20 @@ namespace Test.EngineTests.QueryTests
 
             var testRepository = A.Fake<IEngineRepository>();
 
-            var query = new Application.Commands.Engines.QuerieEngine.GetByIdEngine.GetEngineByIdQuery(engineId);
+            var command = new GetEngineByIdQuery(engineId);
 
-            var queryHandler = new GetEngineByIdQueryHandler(testRepository);
+            var commandHandler = new GetEngineByIdQueryHandler(testRepository);
 
             var expectedEngine = new Engine { EngineId = engineId, EngineFuel = "Gasoline", EngineName = "test", HorsePower = 300 };
 
             A.CallTo(() => testRepository.GetEngineById(A<Guid>._)).Returns(expectedEngine);
 
             // Act
-            var result = await queryHandler.Handle(query, CancellationToken.None);
+            var result = await commandHandler.Handle(command, CancellationToken.None);
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(expectedEngine.EngineId, result.EngineId);
+            Assert.That(result.EngineId, Is.EqualTo(expectedEngine.EngineId));
             Assert.That(result, Is.TypeOf<Engine>());
         }
     }
