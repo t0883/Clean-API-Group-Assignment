@@ -1,4 +1,5 @@
-﻿using Domain.Models.Engines;
+﻿using Domain.Models.Brands;
+using Domain.Models.Engines;
 using Infrastructure.Database.SqlDatabase;
 using Infrastructure.Repository.Engines.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,22 @@ namespace Infrastructure.Repository.Engines
         {
             try
             {
+                if (engine.Brand == null)
+                {
+                    throw new ArgumentException("Engine must have a valid Brand");
+                }
+
+                Engine engineToCreate = engine;
+
+                Brand? brandToConnect = await _sqlServer.Brands.Where(b => b.BrandName == engine.Brand.BrandName).FirstOrDefaultAsync();
+
+                if (brandToConnect == null)
+                {
+                    throw new ArgumentException("Specified Brand does not exist");
+                }
+
+                engineToCreate.Brand = brandToConnect;
+
                 var result = _sqlServer.Engines.Add(engine);
 
                 await _sqlServer.SaveChangesAsync();
@@ -27,7 +44,7 @@ namespace Infrastructure.Repository.Engines
             }
             catch (Exception)
             {
-                throw new ArgumentException($"An error occured");
+                throw;
             }
         }
 
@@ -35,7 +52,12 @@ namespace Infrastructure.Repository.Engines
         {
             try
             {
-                Engine engineToRemove = await _sqlServer.Engines.Where(b => b.EngineId == EngineId).FirstOrDefaultAsync();
+                Engine? engineToRemove = await _sqlServer.Engines.Where(b => b.EngineId == EngineId).FirstOrDefaultAsync();
+
+                if (engineToRemove == null)
+                {
+                    throw new ArgumentException("There is no engine with that Id in the database");
+                }
 
                 var result = _sqlServer.Engines.Remove(engineToRemove);
 
@@ -43,10 +65,10 @@ namespace Infrastructure.Repository.Engines
 
                 return await Task.FromResult(result.Entity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
 
@@ -54,7 +76,7 @@ namespace Infrastructure.Repository.Engines
         {
             try
             {
-                return await Task.FromResult(await _sqlServer.Engines.ToListAsync());
+                return await Task.FromResult(await _sqlServer.Engines.Include(b => b.Brand).ToListAsync());
             }
             catch (Exception ex)
             {
@@ -67,12 +89,19 @@ namespace Infrastructure.Repository.Engines
         {
             try
             {
-                return await Task.FromResult(await _sqlServer.Engines.Where(b => b.EngineId == EngineId).FirstOrDefaultAsync());
+                Engine? engine = await _sqlServer.Engines.Include(b => b.Brand).Where(e => e.EngineId == EngineId).FirstOrDefaultAsync();
+
+                if (engine == null)
+                {
+                    throw new ArgumentException("There is no engine with that Id in the database");
+                }
+
+                return await Task.FromResult(engine);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
 
@@ -80,7 +109,12 @@ namespace Infrastructure.Repository.Engines
         {
             try
             {
-                Engine engineInDatabase = await _sqlServer.Engines.Where(b => b.EngineId == engineToUpdate.EngineId).FirstOrDefaultAsync();
+                Engine? engineInDatabase = await _sqlServer.Engines.Include(b => b.Brand).Where(b => b.EngineId == engineToUpdate.EngineId).FirstOrDefaultAsync();
+
+                if (engineInDatabase == null)
+                {
+                    throw new ArgumentException("There is no engine with that Id in the database");
+                }
 
                 if (engineInDatabase.EngineName != engineToUpdate.EngineName) { engineInDatabase.EngineName = engineToUpdate.EngineName; }
 
@@ -88,15 +122,26 @@ namespace Infrastructure.Repository.Engines
 
                 if (engineInDatabase.HorsePower != engineToUpdate.HorsePower) { engineInDatabase.HorsePower = engineToUpdate.HorsePower; }
 
+                if (engineInDatabase.Brand != engineToUpdate.Brand)
+                {
+                    Brand? brandToConnect = await _sqlServer.Brands.Where(b => b.BrandName == engineToUpdate.Brand.BrandName).FirstOrDefaultAsync();
+
+                    if (brandToConnect == null)
+                    {
+                        throw new ArgumentException("There is no Brand with that name in the database");
+                    }
+
+                    engineInDatabase.Brand = brandToConnect;
+                }
+
                 var result = _sqlServer.Engines.Update(engineInDatabase);
 
                 _sqlServer.SaveChanges();
 
                 return await Task.FromResult(result.Entity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
                 throw;
             }
         }
