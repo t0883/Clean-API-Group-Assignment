@@ -15,7 +15,7 @@ namespace Application.Commands.Engines.AddEngine
 
         public async Task<Engine> Handle(AddEngineCommand request, CancellationToken cancellationToken)
         {
-            Engine engineToCreate = new Engine { EngineId = Guid.NewGuid(), EngineFuel = request.NewEngine.EngineFuel, HorsePower = request.NewEngine.HorsePower, EngineName = request.NewEngine.EngineName };
+            Engine engineToCreate = new Engine { EngineId = Guid.NewGuid(), EngineFuel = request.NewEngine.EngineFuel, HorsePower = request.NewEngine.HorsePower, EngineName = request.NewEngine.EngineName, Brand = request.NewEngine.Brand };
 
             var result = await _engineRepository.AddEngine(engineToCreate);
 
