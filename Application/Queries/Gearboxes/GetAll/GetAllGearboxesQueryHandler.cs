@@ -4,11 +4,11 @@ using MediatR;
 
 namespace Application.Queries.Gearboxes.GetAll
 {
-    public class GetAllGeaxesQueryHandler : IRequestHandler<GetAllGearboxesQuery, List<Gearbox>>
+    public class GetAllGearboxesQueryHandler : IRequestHandler<GetAllGearboxesQuery, List<Gearbox>>
     {
         private readonly IGearboxRepository _gearboxRepository;
 
-        public GetAllGeaxesQueryHandler(IGearboxRepository gearboxRepository)
+        public GetAllGearboxesQueryHandler(IGearboxRepository gearboxRepository)
         {
             _gearboxRepository = gearboxRepository;
         }

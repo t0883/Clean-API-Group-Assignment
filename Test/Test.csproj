@@ -34,6 +34,5 @@
     <Folder Include="EngineTests\" />
     <Folder Include="EngineTests\CommandTests\" />
     <Folder Include="EngineTests\QueryTest\" />
-    <Folder Include="GearboxTests\QueryTests\" />
   </ItemGroup>
 </Project>
