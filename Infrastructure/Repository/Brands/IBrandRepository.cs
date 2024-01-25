@@ -9,5 +9,6 @@ namespace Infrastructure.Repository.Brands
         Task<Brand> GetBrandByName(string brandName);
         Task<Brand> UpdateBrandById(Brand brandToUpdate);
         Task<Brand> DeleteBrandByName(string brandName);
+        Task<bool> IsBrandNameUnique(Brand brand);
     }
 }

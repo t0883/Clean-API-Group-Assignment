@@ -16,6 +16,13 @@ namespace Infrastructure.Repository.Brands
         {
             try
             {
+                bool isBrandNameUnique = await IsBrandNameUnique(brand);
+
+                if (!isBrandNameUnique)
+                {
+                    throw new ArgumentException($"Brand with {brand.BrandName} does already exist in the database");
+                }
+
                 var result = _sqlServer.Brands.Add(brand);
 
                 await _sqlServer.SaveChangesAsync();
@@ -25,7 +32,7 @@ namespace Infrastructure.Repository.Brands
             }
             catch (Exception)
             {
-                throw new ArgumentException($"An error occured while adding {brand.BrandName}. Please check if {brand.BrandName} doesnt already exist in the database.");
+                throw;
             }
         }
 
@@ -33,7 +40,12 @@ namespace Infrastructure.Repository.Brands
         {
             try
             {
-                Brand brandToRemove = await _sqlServer.Brands.Where(b => b.BrandName == brandName).FirstOrDefaultAsync();
+                Brand? brandToRemove = await _sqlServer.Brands.Where(b => b.BrandName == brandName).FirstOrDefaultAsync();
+
+                if (brandToRemove == null)
+                {
+                    throw new ArgumentException($"{brandName} does not exist");
+                }
 
                 var result = _sqlServer.Brands.Remove(brandToRemove);
 
@@ -41,10 +53,10 @@ namespace Infrastructure.Repository.Brands
 
                 return await Task.FromResult(result.Entity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
 
@@ -65,12 +77,31 @@ namespace Infrastructure.Repository.Brands
         {
             try
             {
-                return await Task.FromResult(await _sqlServer.Brands.Where(b => b.BrandName == brandName).FirstOrDefaultAsync());
+                Brand? brand = await _sqlServer.Brands.Where(b => b.BrandName == brandName).FirstOrDefaultAsync();
+
+                if (brand == null)
+                {
+                    throw new ArgumentException($"{brandName} does not exist in the database");
+                }
+
+                return await Task.FromResult(brand);
             }
             catch (Exception ex)
             {
 
-                throw new ArgumentException(ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<bool> IsBrandNameUnique(Brand brand)
+        {
+            try
+            {
+                return !await _sqlServer.Brands.AnyAsync(b => b.BrandName == brand.BrandName);
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
@@ -78,7 +109,12 @@ namespace Infrastructure.Repository.Brands
         {
             try
             {
-                Brand brandInDatabase = await _sqlServer.Brands.Where(b => b.BrandId == brandToUpdate.BrandId).FirstOrDefaultAsync();
+                Brand? brandInDatabase = await _sqlServer.Brands.Where(b => b.BrandId == brandToUpdate.BrandId).FirstOrDefaultAsync();
+
+                if (brandInDatabase == null)
+                {
+                    throw new ArgumentException($"Brand with Id {brandToUpdate.BrandId} does not exist in the database");
+                }
 
                 if (brandInDatabase.BrandName != brandToUpdate.BrandName) { brandInDatabase.BrandName = brandToUpdate.BrandName; }
 
@@ -88,7 +124,7 @@ namespace Infrastructure.Repository.Brands
 
                 return await Task.FromResult(result.Entity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 throw;
