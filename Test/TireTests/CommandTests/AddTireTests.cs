@@ -45,7 +45,7 @@ namespace Test.TireTests.CommandTests
             var result = await commandHandler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.AreEqual(Unit.Value, result);
+            Assert.That(result, Is.EqualTo(Unit.Value));
         }
     }
 }
