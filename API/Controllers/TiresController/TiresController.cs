@@ -10,6 +10,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Application.Validator.GuidValidation;
+using Application.Validator.StringValidation;
 
 namespace API.Controllers.TiresController
 {
@@ -18,19 +20,27 @@ namespace API.Controllers.TiresController
     public class TiresController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly GuidValidator _guidValidator;
+        private readonly StringValidator _stringValidator;
 
-        public TiresController(IMediator mediator)
+        public TiresController(IMediator mediator, GuidValidator guidValidator, StringValidator stringValidator)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _guidValidator = guidValidator ?? throw new ArgumentNullException(nameof(guidValidator));
+            _stringValidator = stringValidator ?? throw new ArgumentNullException(nameof(stringValidator));
         }
 
         [HttpPost]
         [Route("addNewTire")]
         public async Task<IActionResult> AddTire([FromBody] TireDto tire)
         {
-            if (tire == null || string.IsNullOrWhiteSpace(tire.TireModel))
+            var validatedTireModel = _stringValidator.Validate(tire.TireModel);
+            var validatedBrand = _stringValidator.Validate(tire.Brand.BrandName);
+
+            if (!validatedTireModel.IsValid || !validatedBrand.IsValid)
             {
-                return BadRequest();
+                var errors = validatedTireModel.Errors.Concat(validatedBrand.Errors).Select(error => error.ErrorMessage);
+                return BadRequest(errors);
             }
 
             return Ok(await _mediator.Send(new AddTireCommand(tire)));
@@ -47,6 +57,13 @@ namespace API.Controllers.TiresController
         [Route("getTireById/{tireId}")]
         public async Task<IActionResult> GetTireById(Guid tireId)
         {
+            var validatedTireId = _guidValidator.Validate(tireId);
+
+            if (!validatedTireId.IsValid)
+            {
+                return BadRequest(validatedTireId.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+
             return Ok(await _mediator.Send(new GetTireByIdQuery(tireId)));
         }
 
@@ -54,6 +71,13 @@ namespace API.Controllers.TiresController
         [Route("getTireByBrand/{brandName}")]
         public async Task<IActionResult> GetTireByBrand(string brandName)
         {
+            var validatedBrand = _stringValidator.Validate(brandName);
+
+            if (!validatedBrand.IsValid)
+            {
+                return BadRequest(validatedBrand.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+
             return Ok(await _mediator.Send(new GetTireByBrandQuery(brandName)));
         }
 
@@ -61,13 +85,34 @@ namespace API.Controllers.TiresController
         [Route("updateTireById")]
         public async Task<IActionResult> UpdateTireById([FromBody] Tire tireToUpdate)
         {
-            return Ok(await _mediator.Send(new UpdateTireByIdCommand(tireToUpdate)));
+            try
+            {
+                var validatedTireId = _guidValidator.Validate(tireToUpdate.TireId);
+
+                if (!validatedTireId.IsValid)
+                {
+                    return BadRequest(validatedTireId.Errors.ConvertAll(errors => errors.ErrorMessage));
+                }
+
+                return Ok(await _mediator.Send(new UpdateTireByIdCommand(tireToUpdate)));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete]
         [Route("deleteTireById/{tireId}")]
         public async Task<IActionResult> DeleteTireById(Guid tireId)
         {
+            var validatedTireId = _guidValidator.Validate(tireId);
+
+            if (!validatedTireId.IsValid)
+            {
+                return BadRequest(validatedTireId.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+
             await _mediator.Send(new DeleteTireByIdCommand(tireId));
 
             return NoContent();
