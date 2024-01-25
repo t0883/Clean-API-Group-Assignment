@@ -92,27 +92,32 @@ namespace Infrastructure.Repository.Gearboxes
             }
         }
 
-        public async Task<Gearbox> DeleteGearbox(Gearbox gearbox)
+        public async Task<Gearbox> DeleteGearbox(Guid gearboxId)
         {
-            _sqlServer.GearBoxes.Remove(gearbox);
-            await _sqlServer.SaveChangesAsync();
-            return gearbox;
+            //_sqlServer.GearBoxes.Remove(gearbox);
+            //await _sqlServer.SaveChangesAsync();
+            //return gearbox;
 
-            //try
-            //{
-            //    Gearbox gearboxToRemove = await _sqlServer.GearBoxes.Where(g => g.GearboxId == id).FirstOrDefaultAsync();
+            try
+            {
+                Gearbox? gearboxToRemove = await _sqlServer.GearBoxes.Where(g => g.GearboxId == gearboxId).FirstOrDefaultAsync();
 
-            //    var result = _sqlServer.GearBoxes.Remove(gearboxToRemove);
+                if (gearboxToRemove == null)
+                {
+                    throw new ArgumentException("There is no engine with that Id in the database");
+                }
 
-            //    await _sqlServer.SaveChangesAsync();
+                var result = _sqlServer.GearBoxes.Remove(gearboxToRemove);
 
-            //    return await Task.FromResult(result.Entity);
-            //}
-            //catch (Exception ex)
-            //{
+                await _sqlServer.SaveChangesAsync();
 
-            //    throw new ArgumentException(ex.Message);
-            //}
+                return await Task.FromResult(result.Entity);
+            }
+            catch (Exception ex)
+            {
+
+                throw new ArgumentException(ex.Message);
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Domain.Models.Brands;
-using Domain.Models.Gearboxes;
+﻿using Domain.Models.Gearboxes;
 
 namespace Infrastructure.Repository.Gearboxes
 {
@@ -9,6 +8,6 @@ namespace Infrastructure.Repository.Gearboxes
         Task<List<Gearbox>> GetAllGearboxes();
         Task<Gearbox?> GetGearboxById(Guid id);
         Task<Gearbox> UpdateGearboxById(Gearbox gearboxToUpdate);
-        Task<Gearbox> DeleteGearbox(Gearbox gearboxToDelete);
+        Task<Gearbox> DeleteGearbox(Guid gearboxToDelete);
     }
 }
