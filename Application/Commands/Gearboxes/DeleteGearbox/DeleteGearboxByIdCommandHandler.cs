@@ -14,20 +14,19 @@ namespace Application.Commands.Gearboxes.DeleteGearbox
         }
         public async Task<Gearbox> Handle(DeleteGearboxByIdCommand request, CancellationToken cancellationToken)
         {
-            var gearboxToDelete = await _gearboxRepository.GetGearboxById(request.Id);
+            var result = await _gearboxRepository.DeleteGearbox(request.Id);
+            return await Task.FromResult(result);
 
-            if (gearboxToDelete == null)
-            {
-                return await Task.FromResult<Gearbox>(null!);
-            }
+            //var gearboxToDelete = await _gearboxRepository.GetGearboxById(request.Id);
 
-            await _gearboxRepository.DeleteGearbox(gearboxToDelete);
+            //if (gearboxToDelete == null)
+            //{
+            //    return await Task.FromResult<Gearbox>(null!);
+            //}
 
-            return gearboxToDelete;
+            //await _gearboxRepository.DeleteGearbox(gearboxToDelete);
 
-            //var result = await _gearboxRepository.DeleteGearboxById(request.Id);
-
-            //return await Task.FromResult(result);
+            //return gearboxToDelete;
         }
     }
 }
