@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -34,5 +34,6 @@
     <Folder Include="EngineTests\" />
     <Folder Include="EngineTests\CommandTests\" />
     <Folder Include="EngineTests\QueryTest\" />
+    <Folder Include="TireTests\QueryTests\" />
   </ItemGroup>
 </Project>
