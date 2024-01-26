@@ -116,7 +116,17 @@ namespace Infrastructure.Repository.Brands
                     throw new ArgumentException($"Brand with Id {brandToUpdate.BrandId} does not exist in the database");
                 }
 
-                if (brandInDatabase.BrandName != brandToUpdate.BrandName) { brandInDatabase.BrandName = brandToUpdate.BrandName; }
+                if (brandInDatabase.BrandName != brandToUpdate.BrandName)
+                {
+                    bool isBrandUnique = await IsBrandNameUnique(brandToUpdate);
+
+                    if (!isBrandUnique)
+                    {
+                        throw new ArgumentException("A brand with that name does already exist in the database.");
+                    }
+
+                    brandInDatabase.BrandName = brandToUpdate.BrandName;
+                }
 
                 var result = _sqlServer.Brands.Update(brandInDatabase);
 
