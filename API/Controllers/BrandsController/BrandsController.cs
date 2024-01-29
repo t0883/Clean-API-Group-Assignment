@@ -30,14 +30,22 @@ namespace API.Controllers.BrandsController
         [Route("addNewBrand")]
         public async Task<IActionResult> AddBrand([FromBody] BrandDto brand)
         {
-            var validatedBrand = _stringValidator.Validate(brand.BrandName);
-
-            if (!validatedBrand.IsValid)
+            try
             {
-                return BadRequest(validatedBrand.Errors.ConvertAll(errors => errors.ErrorMessage));
-            }
 
-            return Ok(await _mediator.Send(new AddBrandCommand(brand)));
+                var validatedBrand = _stringValidator.Validate(brand.BrandName);
+
+                if (!validatedBrand.IsValid)
+                {
+                    return BadRequest(validatedBrand.Errors.ConvertAll(errors => errors.ErrorMessage));
+                }
+
+                return Ok(await _mediator.Send(new AddBrandCommand(brand)));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
         }
 
@@ -45,14 +53,45 @@ namespace API.Controllers.BrandsController
         [Route("getAllBrands")]
         public async Task<IActionResult> GetAllBrands()
         {
-            return Ok(await _mediator.Send(new GetAllBrandsQuery()));
+            try
+            {
+                List<Brand> brands = await _mediator.Send(new GetAllBrandsQuery());
+
+                if (brands == null)
+                {
+                    throw new Exception("An error occured while getting brands from database");
+                }
+
+                return Ok(brands);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
         [HttpGet]
         [Route("getBrandByName/{brandName}")]
         public async Task<IActionResult> GetBrandByName(string brandName)
         {
-            return Ok(await _mediator.Send(new GetBrandByNameQuery(brandName)));
+            try
+            {
+                Brand brand = await _mediator.Send(new GetBrandByNameQuery(brandName));
+
+                if (brand == null)
+                {
+                    throw new Exception("There is no brand with that name in the database");
+                }
+
+                return Ok(brand);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+
         }
 
         [HttpPut]
@@ -68,11 +107,13 @@ namespace API.Controllers.BrandsController
                     return BadRequest(validatedBrand.Errors.ConvertAll(errors => errors.ErrorMessage));
                 }
 
-                return Ok(await _mediator.Send(new UpdateBrandByIdCommand(brandToUpdate)));
+                Brand updatedBrand = await _mediator.Send(new UpdateBrandByIdCommand(brandToUpdate));
+
+                return Ok(updatedBrand);
             }
             catch (Exception ex)
             {
-                throw new ArgumentException(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -80,9 +121,17 @@ namespace API.Controllers.BrandsController
         [Route("deleteBrandByName/{brandName}")]
         public async Task<IActionResult> DeleteBrandByName(string brandName)
         {
-            await _mediator.Send(new DeleteBrandByNameCommand(brandName));
+            try
+            {
+                await _mediator.Send(new DeleteBrandByNameCommand(brandName));
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return NoContent();
+            }
+
         }
     }
 }
