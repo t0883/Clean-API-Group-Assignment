@@ -115,9 +115,33 @@ namespace Infrastructure.Repository.Users
                     throw new ArgumentException($"There is no user with email {user.Email} in the database");
                 }
 
-                UserToUpdate.Username = user.Username;
-                UserToUpdate.Password = user.Password;
-                UserToUpdate.Email = user.Email;
+                if (UserToUpdate.Password != user.Password) { UserToUpdate.Password = user.Password; }
+
+                if (UserToUpdate.Email != user.Email)
+                {
+                    bool isEmailUnique = await IsEmailUnique(user);
+                    {
+                        if (!isEmailUnique)
+                        {
+                            throw new Exception("Email is already in use by another user. Please use another email");
+                        }
+
+                        UserToUpdate.Email = user.Email;
+
+                    }
+                }
+
+                if (UserToUpdate.Username != user.Username)
+                {
+                    bool isUsernameUnique = await IsUserNameUnique(user);
+
+                    if (!isUsernameUnique)
+                    {
+                        throw new Exception("Username is already in use by another user. Please use another username");
+                    }
+                    UserToUpdate.Username = user.Username;
+
+                }
 
                 _sqlServer.Users.Update(UserToUpdate);
 
@@ -127,7 +151,6 @@ namespace Infrastructure.Repository.Users
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
