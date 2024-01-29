@@ -1,45 +1,52 @@
-Group Assignment: [Assignment Name]
-Description
-This repository contains the collaborative work for [Course Name/Assignment Name]. The purpose of this assignment is to [briefly describe the main goals or objectives].
+<h1 align="center">Hello World!!</h1>
 
-Group Members
-[Member 1 Name] - [Role/Responsibilities]
-[Member 2 Name] - [Role/Responsibilities]
-[Member 3 Name] - [Role/Responsibilities]
-[Member 4 Name] - [Role/Responsibilities]
-Folder Structure
-/docs: Contains any project documentation or reference materials.
-/src: Houses the source code files.
-/data: Stores any data used or generated for the assignment.
-/tests: Includes test files or test cases if applicable.
-/presentation: Contains presentation slides or materials for the final presentation if required.
-Setup Instructions
-Clone the repository: git clone [repository_url]
-Navigate to the project directory: cd [project_folder]
-[Any specific setup steps, software requirements, or dependencies needed]
-Usage
-[Instructions on how to run or use the project. Include any command line instructions or steps to execute the code or access the final output.]
+###
 
-Contributing
-If you're a member of the group:
+<h2 align="left">Clean API Group Assignment</h2>
 
-Fork the repository.
-Create a new branch: git checkout -b feature/branch-name
-Make your changes and commit them: git commit -m 'Description of changes'
-Push to the branch: git push origin feature/branch-name
-Submit a pull request.
-Resources
-[Links to any external resources, tutorials, or documentation used for the assignment.]
+###
 
-Known Issues
-[List any known bugs or issues here.]
+<p align="left">Welcome to the Clean API Group Assignment repository!<br><br>This repository hosts the collaborative efforts of the team in creating a clean, well-structured API. The API serves as a foundation for interacting with a specified dataset, enabling users to perform various operations and retrieve meaningful information.</p>
 
-Contact
-If you have any questions or concerns, feel free to contact:
+###
 
-[Your Name]: [Your Email]
-[Group Member 2 Name]: [Their Email]
-[Group Member 3 Name]: [Their Email]
-License
-[Specify the license for the project if applicable.]
+<h2 align="left">Purpose</h2>
+
+###
+
+<p align="left">The primary objective of this group assignment is to design and implement a clean API adhering to best practices and standards. By creating a robust API, we aim to facilitate seamless communication between clients and the dataset, ensuring ease of use and reliability.</p>
+
+###
+
+<h2 align="left">Dataset</h2>
+
+###
+
+<p align="left">The dataset utilized in this project is [insert dataset name]. It contains [brief description of dataset content and structure]. Understanding the dataset is crucial for designing endpoints and implementing functionalities effectively.</p>
+
+###
+
+<h2 align="left">Project Structure</h2>
+
+###
+
+<p align="left">docs/: Contains documentation related to the API, including guides, usage instructions, and API specifications.<br>src/: Houses the source code for the API implementation.<br>tests/: Contains test cases to ensure the reliability and functionality of the API.<br>README.md: Provides an overview of the project, setup instructions, and any other relevant information.</p>
+
+###
+
+<h2 align="left">Testing</h2>
+
+###
+
+<p align="left">Testing is an integral part of ensuring the reliability and functionality of the API. Unit tests and integration tests are available in the tests/ directory. Run the tests using the appropriate testing framework to verify the correctness of the API implementation.</p>
+
+###
+
+<h2 align="left">Contact</h2>
+
+###
+
+<p align="left">Kontakta inte mig så kontaktar jag inte dig hej.</p>
+
+###
 
