@@ -41,9 +41,18 @@ namespace API.Controllers.UsersController
         [Route("deleteUserByEmail")]
         public async Task<IActionResult> DeleteUserByEmail([FromBody] UserDto userDto)
         {
-            await _mediator.Send(new DeleteUserCommand(userDto));
+            try
+            {
+                await _mediator.Send(new DeleteUserCommand(userDto));
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception)
+            {
+
+                return NoContent();
+            }
+
         }
         [HttpPut]
         [Route("updateUserByEmail")]

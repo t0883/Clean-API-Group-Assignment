@@ -46,7 +46,7 @@ namespace Infrastructure.Repository.Users
         {
             try
             {
-                User userToDelete = await _sqlServer.Users.Where(u => u.Email == user.Email).FirstOrDefaultAsync();
+                User? userToDelete = await _sqlServer.Users.Where(u => u.Email == user.Email).FirstOrDefaultAsync();
 
                 if (userToDelete == null)
                 {
