@@ -20,14 +20,14 @@ namespace Infrastructure.Repository.Users
 
                 if (!uniqueEmail)
                 {
-                    throw new Exception("An emailadress is registered to another user. Please try another emailadress.");
+                    throw new Exception("That emailadress is registered to another user. Please try another emailadress.");
                 }
 
                 bool uniqueUsername = await IsUserNameUnique(user);
 
                 if (!uniqueUsername)
                 {
-                    throw new Exception("A username is already in use");
+                    throw new Exception("That username is already in use by another user.");
                 }
 
                 var result = _sqlServer.Users.Add(user);
@@ -46,11 +46,11 @@ namespace Infrastructure.Repository.Users
         {
             try
             {
-                User userToDelete = await _sqlServer.Users.Where(u => u.Email == user.Email).FirstOrDefaultAsync();
+                User? userToDelete = await _sqlServer.Users.Where(u => u.Email == user.Email).FirstOrDefaultAsync();
 
                 if (userToDelete == null)
                 {
-                    throw new ArgumentException($"There is no user with {user.Email} in the database");
+                    throw new ArgumentException($"There is no user with {user.Email} in the database.");
                 }
 
                 var result = _sqlServer.Users.Remove(userToDelete);
@@ -87,7 +87,7 @@ namespace Infrastructure.Repository.Users
             catch (Exception ex)
             {
 
-                throw new ArgumentException($"An error occured while getting {user.Email}", ex.Message);
+                throw new ArgumentException($"An error occured while getting {user.Email}.", ex.Message);
             }
         }
 
@@ -100,7 +100,7 @@ namespace Infrastructure.Repository.Users
             catch (Exception ex)
             {
 
-                throw new ArgumentException($"An error occured while getting {user.Username}", ex.Message);
+                throw new ArgumentException($"An error occured while getting {user.Username}.", ex.Message);
             }
         }
 
@@ -112,7 +112,7 @@ namespace Infrastructure.Repository.Users
 
                 if (UserToUpdate == null)
                 {
-                    throw new ArgumentException($"There is no user with email {user.Email} in the database");
+                    throw new ArgumentException($"There is no user with email {user.Email} in the database.");
                 }
 
                 if (UserToUpdate.Password != user.Password) { UserToUpdate.Password = user.Password; }
@@ -123,7 +123,7 @@ namespace Infrastructure.Repository.Users
                     {
                         if (!isEmailUnique)
                         {
-                            throw new Exception("Email is already in use by another user. Please use another email");
+                            throw new Exception("Email is already in use by another user. Please use another email.");
                         }
 
                         UserToUpdate.Email = user.Email;
@@ -137,7 +137,7 @@ namespace Infrastructure.Repository.Users
 
                     if (!isUsernameUnique)
                     {
-                        throw new Exception("Username is already in use by another user. Please use another username");
+                        throw new Exception("Username is already in use by another user. Please use another username.");
                     }
                     UserToUpdate.Username = user.Username;
 
