@@ -17,4 +17,10 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Validator\IntValidation\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Validator\IntValidation\" />
+  </ItemGroup>
 </Project>
