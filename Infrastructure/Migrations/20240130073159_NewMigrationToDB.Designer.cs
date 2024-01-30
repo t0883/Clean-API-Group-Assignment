@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SqlServer))]
-    [Migration("20240117151531_AddTireToDatabase")]
-    partial class AddTireToDatabase
+    [Migration("20240130073159_NewMigrationToDB")]
+    partial class NewMigrationToDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -41,6 +41,33 @@ namespace Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Brands");
+                });
+
+            modelBuilder.Entity("Domain.Models.Engines.Engine", b =>
+                {
+                    b.Property<Guid>("EngineId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BrandId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EngineFuel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EngineName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HorsePower")
+                        .HasColumnType("int");
+
+                    b.HasKey("EngineId");
+
+                    b.HasIndex("BrandId");
+
+                    b.ToTable("Engines");
                 });
 
             modelBuilder.Entity("Domain.Models.Gearboxes.Gearbox", b =>
@@ -120,6 +147,17 @@ namespace Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Domain.Models.Engines.Engine", b =>
+                {
+                    b.HasOne("Domain.Models.Brands.Brand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
                 });
 
             modelBuilder.Entity("Domain.Models.Gearboxes.Gearbox", b =>
