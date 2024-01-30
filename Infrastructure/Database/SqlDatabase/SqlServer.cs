@@ -5,6 +5,7 @@ using Domain.Models.Tires;
 using Domain.Models.Engines;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Domain.Models.Seats;
 
 namespace Infrastructure.Database.SqlDatabase
 {
@@ -23,6 +24,8 @@ namespace Infrastructure.Database.SqlDatabase
 
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Tire> Tires { get; set; }
+
+        public virtual DbSet<Seat> Seats { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
