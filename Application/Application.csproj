@@ -7,11 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Commands\Seats\DeleteSeat\**" />
     <Compile Remove="Commands\Seats\UpdateSeat\**" />
-    <EmbeddedResource Remove="Commands\Seats\DeleteSeat\**" />
     <EmbeddedResource Remove="Commands\Seats\UpdateSeat\**" />
-    <None Remove="Commands\Seats\DeleteSeat\**" />
     <None Remove="Commands\Seats\UpdateSeat\**" />
   </ItemGroup>
 
