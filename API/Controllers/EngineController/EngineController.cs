@@ -7,7 +7,10 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Application.Commands.Engines.Queries.GetAll;
 using Application.Commands.Engines.QuerieEngine.GetByIdEngine;
-using Azure.Core;
+using Application.Validator.GuidValidation;
+using Application.Validator.StringValidation;
+using Application.Validator.IntValidation;
+using FluentValidation;
 
 namespace API.Controllers.EnginesController
 {
@@ -16,25 +19,37 @@ namespace API.Controllers.EnginesController
     public class EnginesController : ControllerBase
     {
         internal readonly IMediator _mediator;
+        internal readonly GuidValidator _guidValidator;
+        internal readonly StringValidator _stringValidator;
+        internal readonly IntValidator _intValidator;
 
-        public EnginesController(IMediator mediator)
+        public EnginesController(IMediator mediator, GuidValidator guidValidator, StringValidator stringValidator, IntValidator intValidator)
         {
             _mediator = mediator;
+            _guidValidator = guidValidator;
+            _stringValidator = stringValidator;
+            _intValidator = intValidator;
         }
 
         [HttpPost]
         [Route("addNewEngine")]
-        public async Task<IActionResult> AddEngine([FromBody] EngineDto engineDto)
+        public async Task<IActionResult> AddEngine([FromBody] EngineDto engine)
         {
-            if (engineDto == null || engineDto.EngineFuel == null)
+            var validatedEngineName = _stringValidator.Validate(engine.EngineName);
+
+            if (!validatedEngineName.IsValid)
             {
-                return BadRequest();
+                return BadRequest(validatedEngineName.Errors.ConvertAll(errors => errors.ErrorMessage));
             }
 
-            var command = new AddEngineCommand(engineDto);
-            var result = await _mediator.Send(command);
+            var validatedHorsePower = _intValidator.Validate(engine.HorsePower);
 
-            return Ok(result);
+            if (!validatedHorsePower.IsValid)
+            {
+                return BadRequest(validatedHorsePower.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+
+            return Ok(await _mediator.Send(new AddEngineCommand(engine)));
         }
 
         [HttpGet]
@@ -46,24 +61,60 @@ namespace API.Controllers.EnginesController
 
         [HttpGet]
         [Route("getEngineById")]
-        public async Task<IActionResult> GetEngineById(Guid EngineId)
+        public async Task<IActionResult> GetEngineById(Guid engineId)
         {
-            return Ok(await _mediator.Send(new GetEngineByIdQuery(EngineId)));
+            var validatedEngineId = _guidValidator.Validate(engineId);
+
+            if (!validatedEngineId.IsValid)
+            {
+                return BadRequest(validatedEngineId.Errors.Select(error => error.ErrorMessage));
+            }
+
+            return Ok(await _mediator.Send(new GetEngineByIdQuery(engineId)));
         }
 
         [HttpPut]
         [Route("updateEngine")]
         public async Task<IActionResult> UpdateEngine([FromBody] Engine engineToUpdate)
         {
-            return Ok(await _mediator.Send(new UpdateEngineCommand(engineToUpdate)));
+            try
+            {
+                var validatedEngineId = _guidValidator.Validate(engineToUpdate.EngineId);
+
+                if (!validatedEngineId.IsValid)
+                {
+                    return BadRequest(validatedEngineId.Errors.ConvertAll(errors => errors.ErrorMessage));
+                }
+
+                var validatedHorsePower = _intValidator.Validate(engineToUpdate.HorsePower);
+
+                if (!validatedHorsePower.IsValid)
+                {
+                    return BadRequest(validatedHorsePower.Errors.ConvertAll(errors => errors.ErrorMessage));
+                }
+
+                return Ok(await _mediator.Send(new UpdateEngineCommand(engineToUpdate)));
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
         }
 
         [HttpDelete]
         [Route("deleteEngine")]
-        public async Task<IActionResult> DeleteEngine(Guid EngineId)
+        public async Task<IActionResult> DeleteEngine(Guid engineId)
         {
-            await _mediator.Send(new DeleteEngineCommand(EngineId));
+            var validatedEngineId = _guidValidator.Validate(engineId);
+
+            if (!validatedEngineId.IsValid)
+            {
+                return BadRequest(validatedEngineId.Errors.Select(error => error.ErrorMessage));
+            }
+
+            await _mediator.Send(new DeleteEngineCommand(engineId));
             return NoContent();
         }
+
     }
 }
