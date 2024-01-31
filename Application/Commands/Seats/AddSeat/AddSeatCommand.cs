@@ -1,14 +1,10 @@
 ﻿using Application.Dtos;
+using Domain.Models.Seats;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Commands.Seats.AddSeat
 {
-    public class AddSeatCommand : IRequest<Unit>
+    public class AddSeatCommand : IRequest<Seat>
     {
         public AddSeatCommand(SeatDto newSeat)
         {

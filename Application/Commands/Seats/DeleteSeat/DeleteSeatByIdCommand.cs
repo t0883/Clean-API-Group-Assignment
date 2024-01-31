@@ -1,13 +1,9 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Models.Seats;
+using MediatR;
 
 namespace Application.Commands.Seats.DeleteSeat
 {
-    public class DeleteSeatByIdCommand : IRequest<Unit>
+    public class DeleteSeatByIdCommand : IRequest<Seat>
     {
         public DeleteSeatByIdCommand(Guid seatId)
         {

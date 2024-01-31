@@ -1,16 +1,10 @@
-﻿using Application.Commands.Seats.UpdateSeat;
-using Domain.Models.Seats;
+﻿using Domain.Models.Seats;
 using Infrastructure.Repository.Seats;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Commands.Seats.UpdateSeat
 {
-    public class UpdateSeatByIdCommandHandler : IRequestHandler<UpdateSeatByIdCommand, Unit>
+    public class UpdateSeatByIdCommandHandler : IRequestHandler<UpdateSeatByIdCommand, Seat>
     {
         private readonly ISeatRepository _seatRepository;
 
@@ -19,7 +13,7 @@ namespace Application.Commands.Seats.UpdateSeat
             _seatRepository = seatRepository;
         }
 
-        public async Task<Unit> Handle(UpdateSeatByIdCommand request, CancellationToken cancellationToken)
+        public async Task<Seat> Handle(UpdateSeatByIdCommand request, CancellationToken cancellationToken)
         {
             var updatedSeat = new Seat
             {
@@ -29,8 +23,9 @@ namespace Application.Commands.Seats.UpdateSeat
                 SeatMaterial = request.SeatMaterial
             };
 
-            await _seatRepository.UpdateSeat(updatedSeat);
+            var result = await _seatRepository.UpdateSeat(updatedSeat);
 
-            return Unit.Value;
+            return await Task.FromResult(result);
         }
     }
+}

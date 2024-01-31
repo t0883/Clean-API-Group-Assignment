@@ -1,16 +1,10 @@
-﻿using Azure.Core;
-using Domain.Models.Brands;
+﻿using Domain.Models.Brands;
 using Domain.Models.Seats;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Commands.Seats.UpdateSeat
 {
-    public class UpdateSeatByIdCommand : IRequest<Unit>
+    public class UpdateSeatByIdCommand : IRequest<Seat>
     {
         public UpdateSeatByIdCommand(Seat seatToUpdate)
         {

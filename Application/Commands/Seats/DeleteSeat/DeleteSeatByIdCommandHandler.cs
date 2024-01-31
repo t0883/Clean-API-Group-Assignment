@@ -1,14 +1,10 @@
-﻿using Infrastructure.Repository.Seats;
+﻿using Domain.Models.Seats;
+using Infrastructure.Repository.Seats;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Commands.Seats.DeleteSeat
 {
-    public class DeleteSeatByIdCommandHandler : IRequestHandler<DeleteSeatByIdCommand, Unit>
+    public class DeleteSeatByIdCommandHandler : IRequestHandler<DeleteSeatByIdCommand, Seat>
     {
         private readonly ISeatRepository _seatRepository;
 
@@ -17,10 +13,11 @@ namespace Application.Commands.Seats.DeleteSeat
             _seatRepository = seatRepository ?? throw new ArgumentNullException(nameof(seatRepository));
         }
 
-        public async Task<Unit> Handle(DeleteSeatByIdCommand request, CancellationToken cancellationToken)
+        public async Task<Seat> Handle(DeleteSeatByIdCommand request, CancellationToken cancellationToken)
         {
-            await _seatRepository.DeleteSeatById(request.SeatId);
+            var result = await _seatRepository.DeleteSeatById(request.SeatId);
 
-            return Unit.Value;
+            return await Task.FromResult(result);
         }
     }
+}

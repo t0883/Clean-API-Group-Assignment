@@ -1,11 +1,5 @@
 ﻿using Domain.Models.Seats;
 using Infrastructure.Database.SqlDatabase;
-using Infrastructure.Repository.Seats;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository.Seats
@@ -39,7 +33,12 @@ namespace Infrastructure.Repository.Seats
         {
             try
             {
-                Seat seatToRemove = await _sqlServer.Seats.Where(t => t.SeatId == seatId).FirstOrDefaultAsync();
+                Seat? seatToRemove = await _sqlServer.Seats.Where(t => t.SeatId == seatId).FirstOrDefaultAsync();
+
+                if (seatToRemove == null)
+                {
+                    throw new Exception($"The is no seat with Id {seatId} in the database.");
+                }
 
                 var result = _sqlServer.Seats.Remove(seatToRemove);
 
@@ -47,9 +46,9 @@ namespace Infrastructure.Repository.Seats
 
                 return await Task.FromResult(result.Entity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
 
@@ -95,8 +94,9 @@ namespace Infrastructure.Repository.Seats
             {
                 Seat seatInDatabase = await _sqlServer.Seats.Where(t => t.SeatId == seatToUpdate.SeatId).FirstOrDefaultAsync();
 
-                if (seatInDatabase.SeatName != seatToUpdate.SeatName){
-                    seatInDatabase.SeatName = seatToUpdate.SeatName; 
+                if (seatInDatabase.SeatName != seatToUpdate.SeatName)
+                {
+                    seatInDatabase.SeatName = seatToUpdate.SeatName;
                 }
 
                 if (seatInDatabase.SeatColor != seatToUpdate.SeatColor)
@@ -109,9 +109,9 @@ namespace Infrastructure.Repository.Seats
                     seatInDatabase.SeatMaterial = seatToUpdate.SeatMaterial;
                 }
 
-                    // Lägg till uppdatering för andra egenskaper här om det behövs
+                // Lägg till uppdatering för andra egenskaper här om det behövs
 
-                    var result = _sqlServer.Seats.Update(seatInDatabase);
+                var result = _sqlServer.Seats.Update(seatInDatabase);
 
                 await _sqlServer.SaveChangesAsync();
 
