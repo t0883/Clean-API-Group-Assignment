@@ -68,7 +68,8 @@ namespace Infrastructure.Repository.Seats
         {
             try
             {
-                return await Task.FromResult(await _sqlServer.Seats.Where(t => t.SeatId == seatId).FirstOrDefaultAsync());
+                Seat? result = await _sqlServer.Seats.Where(t => t.SeatId == seatId).FirstOrDefaultAsync();
+                return await Task.FromResult(result);
             }
             catch (Exception ex)
             {
