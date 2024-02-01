@@ -55,7 +55,7 @@ namespace Infrastructure.Repository.Tires
         {
             try
             {
-                return await Task.FromResult(await _sqlServer.Tires.ToListAsync());
+                return await _sqlServer.Tires.Include(t => t.Brand).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -67,7 +67,7 @@ namespace Infrastructure.Repository.Tires
         {
             try
             {
-                return await Task.FromResult(await _sqlServer.Tires.Where(t => t.TireId == tireId).FirstOrDefaultAsync());
+                return await _sqlServer.Tires.Include(t => t.Brand).Where(t => t.TireId == tireId).FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {
@@ -79,7 +79,7 @@ namespace Infrastructure.Repository.Tires
         {
             try
             {
-                return await Task.FromResult(await _sqlServer.Tires.Where(t => t.Brand.BrandName == brandName).ToListAsync());
+                return await _sqlServer.Tires.Include(t => t.Brand).Where(t => t.Brand.BrandName == brandName).ToListAsync();
             }
             catch (Exception ex)
             {
