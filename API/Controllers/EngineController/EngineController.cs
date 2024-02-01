@@ -100,7 +100,6 @@ namespace API.Controllers.EnginesController
                 throw new ArgumentException(ex.Message);
             }
         }
-
         [HttpDelete]
         [Route("deleteEngine")]
         public async Task<IActionResult> DeleteEngine(Guid engineId)
@@ -115,6 +114,5 @@ namespace API.Controllers.EnginesController
             await _mediator.Send(new DeleteEngineCommand(engineId));
             return NoContent();
         }
-
     }
 }
