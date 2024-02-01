@@ -6,26 +6,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTireToDatabase : Migration
+    public partial class AddedSeatModelToDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Tires",
+                name: "Seats",
                 columns: table => new
                 {
-                    TireId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TireModel = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SeatId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SeatName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BrandId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TireSize = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TireTreadDepth = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    SeatColor = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SeatMaterial = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tires", x => x.TireId);
+                    table.PrimaryKey("PK_Seats", x => x.SeatId);
                     table.ForeignKey(
-                        name: "FK_Tires_Brands_BrandId",
+                        name: "FK_Seats_Brands_BrandId",
                         column: x => x.BrandId,
                         principalTable: "Brands",
                         principalColumn: "BrandId",
@@ -33,8 +33,8 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tires_BrandId",
-                table: "Tires",
+                name: "IX_Seats_BrandId",
+                table: "Seats",
                 column: "BrandId");
         }
 
@@ -42,7 +42,7 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Tires");
+                name: "Seats");
         }
     }
 }

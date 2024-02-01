@@ -10,6 +10,7 @@ using Application.Commands.Engines.QuerieEngine.GetByIdEngine;
 using Application.Validator.GuidValidation;
 using Application.Validator.StringValidation;
 using Application.Validator.IntValidation;
+using FluentValidation;
 
 namespace API.Controllers.EnginesController
 {
@@ -51,6 +52,21 @@ namespace API.Controllers.EnginesController
             {
                 return BadRequest(ex.Message);
             }
+            var validatedEngineName = _stringValidator.Validate(engine.EngineName);
+
+            if (!validatedEngineName.IsValid)
+            {
+                return BadRequest(validatedEngineName.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+
+            var validatedHorsePower = _intValidator.Validate(engine.HorsePower);
+
+            if (!validatedHorsePower.IsValid)
+            {
+                return BadRequest(validatedHorsePower.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+
+            return Ok(await _mediator.Send(new AddEngineCommand(engine)));
         }
 
         [HttpGet]
@@ -84,6 +100,14 @@ namespace API.Controllers.EnginesController
             {
                 return BadRequest(ex.Message);
             }
+            var validatedEngineId = _guidValidator.Validate(engineId);
+
+            if (!validatedEngineId.IsValid)
+            {
+                return BadRequest(validatedEngineId.Errors.Select(error => error.ErrorMessage));
+            }
+
+            return Ok(await _mediator.Send(new GetEngineByIdQuery(engineId)));
         }
 
         [HttpPut]
@@ -101,11 +125,24 @@ namespace API.Controllers.EnginesController
                 if (!validatedHorsePower.IsValid)
                     return BadRequest(validatedHorsePower.Errors.Select(errors => errors.ErrorMessage));
 
+                if (!validatedEngineId.IsValid)
+                {
+                    return BadRequest(validatedEngineId.Errors.ConvertAll(errors => errors.ErrorMessage));
+                }
+
+                var validatedHorsePower = _intValidator.Validate(engineToUpdate.HorsePower);
+
+                if (!validatedHorsePower.IsValid)
+                {
+                    return BadRequest(validatedHorsePower.Errors.ConvertAll(errors => errors.ErrorMessage));
+                }
+
                 return Ok(await _mediator.Send(new UpdateEngineCommand(engineToUpdate)));
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+                throw new ArgumentException(ex.Message);
             }
         }
 
@@ -127,6 +164,16 @@ namespace API.Controllers.EnginesController
             {
                 return BadRequest(ex.Message);
             }
+            var validatedEngineId = _guidValidator.Validate(engineId);
+
+            if (!validatedEngineId.IsValid)
+            {
+                return BadRequest(validatedEngineId.Errors.Select(error => error.ErrorMessage));
+            }
+
+            await _mediator.Send(new DeleteEngineCommand(engineId));
+            return NoContent();
         }
+
     }
 }

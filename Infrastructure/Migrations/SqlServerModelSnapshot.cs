@@ -90,6 +90,34 @@ namespace Infrastructure.Migrations
                     b.ToTable("GearBoxes");
                 });
 
+            modelBuilder.Entity("Domain.Models.Seats.Seat", b =>
+                {
+                    b.Property<Guid>("SeatId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BrandId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SeatColor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SeatMaterial")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SeatName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SeatId");
+
+                    b.HasIndex("BrandId");
+
+                    b.ToTable("Seats");
+                });
+
             modelBuilder.Entity("Domain.Models.Tires.Tire", b =>
                 {
                     b.Property<Guid>("TireId")
@@ -158,6 +186,17 @@ namespace Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("Domain.Models.Gearboxes.Gearbox", b =>
+                {
+                    b.HasOne("Domain.Models.Brands.Brand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+                });
+
+            modelBuilder.Entity("Domain.Models.Seats.Seat", b =>
                 {
                     b.HasOne("Domain.Models.Brands.Brand", "Brand")
                         .WithMany()

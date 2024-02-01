@@ -21,6 +21,7 @@
     <None Remove="Validator\IntValidation\" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Queries\Seats\GetByBrand\" />
     <Folder Include="Validator\IntValidation\" />
   </ItemGroup>
 </Project>

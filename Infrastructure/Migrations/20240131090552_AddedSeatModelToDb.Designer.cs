@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SqlServer))]
-    [Migration("20240119154916_AddEngineModelToDB")]
-    partial class AddEngineModelToDB
+    [Migration("20240131090552_AddedSeatModelToDb")]
+    partial class AddedSeatModelToDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,6 +49,9 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("BrandId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("EngineFuel")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -61,6 +64,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("EngineId");
+
+                    b.HasIndex("BrandId");
 
                     b.ToTable("Engines");
                 });
@@ -86,6 +91,34 @@ namespace Infrastructure.Migrations
                     b.HasIndex("BrandId");
 
                     b.ToTable("GearBoxes");
+                });
+
+            modelBuilder.Entity("Domain.Models.Seats.Seat", b =>
+                {
+                    b.Property<Guid>("SeatId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BrandId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SeatColor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SeatMaterial")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SeatName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SeatId");
+
+                    b.HasIndex("BrandId");
+
+                    b.ToTable("Seats");
                 });
 
             modelBuilder.Entity("Domain.Models.Tires.Tire", b =>
@@ -144,7 +177,29 @@ namespace Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Domain.Models.Engines.Engine", b =>
+                {
+                    b.HasOne("Domain.Models.Brands.Brand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+                });
+
             modelBuilder.Entity("Domain.Models.Gearboxes.Gearbox", b =>
+                {
+                    b.HasOne("Domain.Models.Brands.Brand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+                });
+
+            modelBuilder.Entity("Domain.Models.Seats.Seat", b =>
                 {
                     b.HasOne("Domain.Models.Brands.Brand", "Brand")
                         .WithMany()
