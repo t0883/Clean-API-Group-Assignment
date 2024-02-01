@@ -20,7 +20,7 @@ namespace Infrastructure.Repository.Brands
 
                 if (!isBrandNameUnique)
                 {
-                    throw new ArgumentException($"Brand with {brand.BrandName} does already exist in the database");
+                    throw new ArgumentException($"Brand with {brand.BrandName} does already exist in the database.");
                 }
 
                 var result = _sqlServer.Brands.Add(brand);
@@ -44,7 +44,7 @@ namespace Infrastructure.Repository.Brands
 
                 if (brandToRemove == null)
                 {
-                    throw new ArgumentException($"{brandName} does not exist");
+                    throw new ArgumentException($"{brandName} does not exist.");
                 }
 
                 var result = _sqlServer.Brands.Remove(brandToRemove);
@@ -81,14 +81,13 @@ namespace Infrastructure.Repository.Brands
 
                 if (brand == null)
                 {
-                    throw new ArgumentException($"{brandName} does not exist in the database");
+                    throw new ArgumentException($"{brandName} does not exist in the database.");
                 }
 
                 return await Task.FromResult(brand);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
                 throw;
             }
         }
@@ -113,10 +112,20 @@ namespace Infrastructure.Repository.Brands
 
                 if (brandInDatabase == null)
                 {
-                    throw new ArgumentException($"Brand with Id {brandToUpdate.BrandId} does not exist in the database");
+                    throw new ArgumentException($"Brand with Id {brandToUpdate.BrandId} does not exist in the database.");
                 }
 
-                if (brandInDatabase.BrandName != brandToUpdate.BrandName) { brandInDatabase.BrandName = brandToUpdate.BrandName; }
+                if (brandInDatabase.BrandName != brandToUpdate.BrandName)
+                {
+                    bool isBrandUnique = await IsBrandNameUnique(brandToUpdate);
+
+                    if (!isBrandUnique)
+                    {
+                        throw new ArgumentException("A brand with that name does already exist in the database.");
+                    }
+
+                    brandInDatabase.BrandName = brandToUpdate.BrandName;
+                }
 
                 var result = _sqlServer.Brands.Update(brandInDatabase);
 

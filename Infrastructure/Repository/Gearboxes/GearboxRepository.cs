@@ -17,18 +17,13 @@ namespace Infrastructure.Repository.Gearboxes
         {
             try
             {
-                if (gearbox.Brand == null)
-                {
-                    throw new ArgumentException("Gearbox must have a valid Brand.");
-                }
-
                 Gearbox gearboxToCreate = gearbox;
 
                 Brand brandToConnect = await _sqlServer.Brands.Where(b => b.BrandName == gearbox.Brand.BrandName).FirstOrDefaultAsync();
 
                 if (brandToConnect == null)
                 {
-                    throw new ArgumentException("Specified Brand does not exist.");
+                    throw new ArgumentException($"Specified Brand {gearbox.Brand.BrandName} does not exist.");
                 }
 
                 gearboxToCreate.Brand = brandToConnect;
@@ -39,9 +34,9 @@ namespace Infrastructure.Repository.Gearboxes
 
                 return await Task.FromResult(reslut.Entity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
 
@@ -62,25 +57,34 @@ namespace Infrastructure.Repository.Gearboxes
         {
             try
             {
-                return await Task.FromResult(await _sqlServer.GearBoxes.Include(g => g.Brand).Where(g => g.GearboxId == id).FirstOrDefaultAsync());
+                Gearbox? gearbox = await _sqlServer.GearBoxes.Include(g => g.Brand).Where(b => b.GearboxId == id).FirstOrDefaultAsync();
+
+                if (gearbox == null)
+                {
+                    throw new ArgumentException($"{id} does not exist in the database.");
+                }
+
+                return await Task.FromResult(gearbox);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
 
-        public async Task<Gearbox> UpdateGearboxById(Gearbox gearbox)
+        public async Task<Gearbox> UpdateGearboxById(Gearbox gearboxToUpdate)
         {
             try
             {
-                Gearbox existingGearbox = await _sqlServer.GearBoxes
-                    .Where(g => g.GearboxId == gearbox.GearboxId)
-                    .FirstOrDefaultAsync() ?? throw new ArgumentException("Gearbox not found.");
+                Gearbox? existingGearbox = await _sqlServer.GearBoxes.Where(g => g.GearboxId == gearboxToUpdate.GearboxId).FirstOrDefaultAsync();
+                if (existingGearbox == null)
+                {
+                    throw new ArgumentException($"Gearbox with Id {existingGearbox.GearboxId} does not exist in the database.");
+                }
 
-                existingGearbox.GearboxModel = gearbox.GearboxModel;
-                existingGearbox.Brand = gearbox.Brand;
-                existingGearbox.SixGears = gearbox.SixGears;
+                existingGearbox.GearboxModel = gearboxToUpdate.GearboxModel;
+                existingGearbox.Brand = gearboxToUpdate.Brand;
+                existingGearbox.SixGears = gearboxToUpdate.SixGears;
 
                 await _sqlServer.SaveChangesAsync();
 
@@ -94,17 +98,13 @@ namespace Infrastructure.Repository.Gearboxes
 
         public async Task<Gearbox> DeleteGearbox(Guid gearboxId)
         {
-            //_sqlServer.GearBoxes.Remove(gearbox);
-            //await _sqlServer.SaveChangesAsync();
-            //return gearbox;
-
             try
             {
                 Gearbox? gearboxToRemove = await _sqlServer.GearBoxes.Where(g => g.GearboxId == gearboxId).FirstOrDefaultAsync();
 
                 if (gearboxToRemove == null)
                 {
-                    throw new ArgumentException("There is no engine with that Id in the database");
+                    throw new ArgumentException($"There is no gearbox with Id {gearboxId} in the database");
                 }
 
                 var result = _sqlServer.GearBoxes.Remove(gearboxToRemove);
@@ -113,10 +113,10 @@ namespace Infrastructure.Repository.Gearboxes
 
                 return await Task.FromResult(result.Entity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
     }
