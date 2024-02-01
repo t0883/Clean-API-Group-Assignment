@@ -30,13 +30,11 @@ namespace API.Controllers.SeatsController
             {
                 return BadRequest(validatedSeatName.Errors.ConvertAll(errors => errors.ErrorMessage));
             }
-            
             var validatedSeatColor = _stringValidator.Validate(seat.SeatColor);
             if (!validatedSeatColor.IsValid)
             {
                 return BadRequest(validatedSeatColor.Errors.ConvertAll(errors => errors.ErrorMessage));
             }
-           
             var validatedSeatMaterial = _stringValidator.Validate(seat.SeatMaterial);
             if (!validatedSeatMaterial.IsValid)
             {
