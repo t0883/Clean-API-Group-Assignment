@@ -1,5 +1,6 @@
 ﻿using Application.Commands.Seats.AddSeat;
 using Application.Dtos;
+using Application.Queries.Seats.GetAll;
 using Application.Validator.GuidValidation;
 using Application.Validator.StringValidation;
 using MediatR;
@@ -41,6 +42,12 @@ namespace API.Controllers.SeatsController
                 return BadRequest(validatedSeatMaterial.Errors.ConvertAll(errors => errors.ErrorMessage));
             }
             return Ok(await _mediator.Send(new AddSeatCommand(seat)));
+        }
+        [HttpGet]
+        [Route("getAllSeats")]
+        public async Task<IActionResult> GetAllSeats()
+        {
+            return Ok(await _mediator.Send(new GetAllSeatsQuery()));
         }
     }
 }
