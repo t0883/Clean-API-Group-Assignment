@@ -44,14 +44,12 @@ namespace API.Controllers.SeatsController
             }
             return Ok(await _mediator.Send(new AddSeatCommand(seat)));
         }
-       
         [HttpGet]
         [Route("getAllSeats")]
         public async Task<IActionResult> GetAllSeats()
         {
             return Ok(await _mediator.Send(new GetAllSeatsQuery()));
         }
-       
         [HttpGet]
         [Route("getSeatById/{seatId}")]
         public async Task<IActionResult> GetSeatById(Guid seatId)
