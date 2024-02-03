@@ -1,9 +1,12 @@
 ﻿using Application.Commands.Seats.AddSeat;
+using Application.Commands.Seats.DeleteSeat;
+using Application.Commands.Seats.UpdateSeat;
 using Application.Dtos;
 using Application.Queries.Seats.GetAll;
 using Application.Queries.Seats.GetById;
 using Application.Validator.GuidValidation;
 using Application.Validator.StringValidation;
+using Domain.Models.Seats;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -70,6 +73,36 @@ namespace API.Controllers.SeatsController
             {
                 return NotFound(ex.Message);
             }
+        }
+        [HttpPut]
+        [Route("updateSeat")]
+        public async Task<IActionResult> UpdateSeatById([FromBody] Seat seatToUpdate)
+        {
+            try
+            {
+                var validatedSeatId = _guidValidator.Validate(seatToUpdate.SeatId);
+                if (!validatedSeatId.IsValid)
+                {
+                    return BadRequest(validatedSeatId.Errors.ConvertAll(errors => errors.ErrorMessage));
+                }
+                return Ok(await _mediator.Send(new UpdateSeatByIdCommand(seatToUpdate)));
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+        }
+        [HttpDelete]
+        [Route("deleteSeat")]
+        public async Task<IActionResult> DeleteSeat(Guid seatId)
+        {
+            var validatedSeatId = _guidValidator.Validate(seatId);
+            if (!validatedSeatId.IsValid)
+            {
+                return BadRequest(validatedSeatId.Errors.Select(error => error.ErrorMessage));
+            }
+            await _mediator.Send(new DeleteSeatByIdCommand(seatId));
+            return NoContent();
         }
     }
 }
