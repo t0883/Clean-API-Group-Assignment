@@ -89,7 +89,7 @@ namespace API.Controllers.SeatsController
             }
             catch (Exception ex)
             {
-                throw new ArgumentException(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
         [HttpDelete]
