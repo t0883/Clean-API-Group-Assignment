@@ -86,8 +86,7 @@ namespace API.Controllers.SeatsController
                 {
                     return BadRequest(validatedSeatId.Errors.ConvertAll(errors => errors.ErrorMessage));
                 }
-                
-                return Ok(await _mediator.Send(new UpdateSeatByIdCommand(seatToUpdate)));
+                 return Ok(await _mediator.Send(new UpdateSeatByIdCommand(seatToUpdate)));
             }
             catch (Exception ex)
             {
