@@ -89,7 +89,6 @@ namespace API.Controllers.SeatsController
                 
                 return Ok(await _mediator.Send(new UpdateSeatByIdCommand(seatToUpdate)));
             }
-           
             catch (Exception ex)
             {
                 throw new ArgumentException(ex.Message);
