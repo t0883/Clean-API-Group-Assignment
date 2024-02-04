@@ -1,6 +1,10 @@
-﻿namespace Infrastructure.Repository.Cars
+﻿using Domain.Models.Cars;
+
+namespace Infrastructure.Repository.Cars
 {
-    internal interface ICarRepository
+    public interface ICarRepository
     {
+        Task<Car> AddCar(Car car);
+
     }
 }
