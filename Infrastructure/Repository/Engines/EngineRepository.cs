@@ -76,12 +76,19 @@ namespace Infrastructure.Repository.Engines
         {
             try
             {
-                return await Task.FromResult(await _sqlServer.Engines.Include(b => b.Brand).ToListAsync());
+                var result = await _sqlServer.Engines.Include(b => b.Brand).ToListAsync();
+
+                if (result.Count == 0)
+                {
+                    throw new Exception("There are no engines in the database.");
+                }
+
+                return await Task.FromResult(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
 
