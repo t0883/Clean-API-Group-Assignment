@@ -1,4 +1,5 @@
-﻿using Domain.Models.Seats;
+﻿using Domain.Models.Brands;
+using Domain.Models.Seats;
 using Infrastructure.Database.SqlDatabase;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,15 @@ namespace Infrastructure.Repository.Seats
         {
             try
             {
+                Brand? brandToConnect = await _sqlServer.Brands.Where(b => b.BrandName == seat.Brand.BrandName).FirstOrDefaultAsync();
+
+                if (brandToConnect == null)
+                {
+                    throw new Exception("There is no brand with that name in the database.");
+                }
+
+                seat.Brand = brandToConnect;
+
                 var result = _sqlServer.Seats.Add(seat);
 
                 await _sqlServer.SaveChangesAsync();
@@ -25,7 +35,7 @@ namespace Infrastructure.Repository.Seats
             }
             catch (Exception)
             {
-                throw new ArgumentException($"An error occurred while adding seat with ID {seat.SeatId}. Please check if the seat with ID {seat.SeatId} doesn't already exist in the database.");
+                throw;
             }
         }
 
@@ -56,11 +66,18 @@ namespace Infrastructure.Repository.Seats
         {
             try
             {
-                return await Task.FromResult(await _sqlServer.Seats.Include(b => b.Brand).ToListAsync());
+                var result = await _sqlServer.Seats.Include(b => b.Brand).ToListAsync();
+
+                if (result.Count == 0)
+                {
+                    throw new Exception("There are no seats in the database.");
+                }
+
+                return await Task.FromResult(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
 
@@ -76,7 +93,7 @@ namespace Infrastructure.Repository.Seats
 
                 return await Task.FromResult(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

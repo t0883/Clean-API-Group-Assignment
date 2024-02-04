@@ -1,5 +1,6 @@
 ﻿using Application.Commands.Cars.AddCar;
 using Application.Dtos;
+using Application.Queries.Cars.GetAll;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,8 +25,6 @@ namespace API.Controllers.CarsController
             {
                 return Ok(await _mediator.Send(new AddCarCommand(car)));
 
-
-
             }
             catch (Exception ex)
             {
@@ -33,6 +32,19 @@ namespace API.Controllers.CarsController
             }
         }
 
+        [HttpGet]
+        [Route("getAllCars")]
+        public async Task<IActionResult> GetAllCars()
+        {
+            try
+            {
+                return Ok(await _mediator.Send(new GetAllCarsQuery()));
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
 
     }
