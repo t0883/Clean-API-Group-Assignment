@@ -3,11 +3,6 @@ using Domain.Models.Brands;
 using Domain.Models.Tires;
 using FakeItEasy;
 using Infrastructure.Repository.Tires;
-using MediatR;
-using NUnit.Framework;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Test.TireTests.CommandTests
 {
@@ -31,11 +26,13 @@ namespace Test.TireTests.CommandTests
             var command = new UpdateTireByIdCommand(tireToUpdate);
             var commandHandler = new UpdateTireByIdCommandHandler(testRepository);
 
+            A.CallTo(() => testRepository.UpdateTire(A<Tire>._)).Returns(tireToUpdate);
+
             // Act
             var result = await commandHandler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.That(result, Is.EqualTo(Unit.Value));
+            Assert.That(result, Is.TypeOf<Tire>());
             A.CallTo(() => testRepository.UpdateTire(A<Tire>._)).MustHaveHappenedOnceExactly();
         }
     }
