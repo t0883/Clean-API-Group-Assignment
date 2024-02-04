@@ -1,11 +1,10 @@
 ﻿using Domain.Models.Brands;
 using Domain.Models.Tires;
 using MediatR;
-using System;
 
 namespace Application.Commands.Tires.UpdateTire
 {
-    public class UpdateTireByIdCommand : IRequest<Unit>
+    public class UpdateTireByIdCommand : IRequest<Tire>
     {
         public UpdateTireByIdCommand(Tire tireToUpdate)
         {

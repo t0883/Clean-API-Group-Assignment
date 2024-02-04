@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Domain.Models.Brands;
 using Domain.Models.Tires;
 using Infrastructure.Database.SqlDatabase;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +18,17 @@ namespace Infrastructure.Repository.Tires
         {
             try
             {
+                Tire tireToCreate = tire;
+
+                Brand? brandToConnect = await _sqlServer.Brands.Where(b => b.BrandName == tire.Brand.BrandName).FirstOrDefaultAsync();
+
+                if (brandToConnect == null)
+                {
+                    throw new Exception("There is no Brand with that name in the database.");
+                }
+
+                tireToCreate.Brand = brandToConnect;
+
                 var result = _sqlServer.Tires.Add(tire);
 
                 await _sqlServer.SaveChangesAsync();
@@ -29,7 +37,7 @@ namespace Infrastructure.Repository.Tires
             }
             catch (Exception)
             {
-                throw new ArgumentException($"An error occurred while adding tire with ID {tire.TireId}. Please check if the tire with ID {tire.TireId} doesn't already exist in the database.");
+                throw;
             }
         }
 
@@ -37,7 +45,12 @@ namespace Infrastructure.Repository.Tires
         {
             try
             {
-                Tire tireToRemove = await _sqlServer.Tires.Where(t => t.TireId == tireId).FirstOrDefaultAsync();
+                Tire? tireToRemove = await _sqlServer.Tires.Where(t => t.TireId == tireId).FirstOrDefaultAsync();
+
+                if (tireToRemove == null)
+                {
+                    throw new Exception("There is no tire with that Id in the database.");
+                }
 
                 var result = _sqlServer.Tires.Remove(tireToRemove);
 
@@ -45,9 +58,9 @@ namespace Infrastructure.Repository.Tires
 
                 return await Task.FromResult(result.Entity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
 
@@ -55,11 +68,18 @@ namespace Infrastructure.Repository.Tires
         {
             try
             {
-                return await _sqlServer.Tires.Include(t => t.Brand).ToListAsync();
+                var result = await _sqlServer.Tires.Include(t => t.Brand).ToListAsync();
+
+                if (result == null)
+                {
+                    throw new Exception("There are no tires in the database.");
+                }
+
+                return await Task.FromResult(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
 
@@ -67,11 +87,18 @@ namespace Infrastructure.Repository.Tires
         {
             try
             {
-                return await _sqlServer.Tires.Include(t => t.Brand).Where(t => t.TireId == tireId).FirstOrDefaultAsync();
+                var result = await _sqlServer.Tires.Include(t => t.Brand).Where(t => t.TireId == tireId).FirstOrDefaultAsync();
+
+                if (result == null)
+                {
+                    throw new Exception("There is no tire with that Id in the database.");
+                }
+
+                return await Task.FromResult(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
 
@@ -79,11 +106,18 @@ namespace Infrastructure.Repository.Tires
         {
             try
             {
-                return await _sqlServer.Tires.Include(t => t.Brand).Where(t => t.Brand.BrandName == brandName).ToListAsync();
+                var result = await _sqlServer.Tires.Include(t => t.Brand).Where(t => t.Brand.BrandName == brandName).ToListAsync();
+
+                if (result.Count == 0)
+                {
+                    throw new Exception("There is no tires with that brand in the database.");
+                }
+
+                return await Task.FromResult(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
 
@@ -91,7 +125,12 @@ namespace Infrastructure.Repository.Tires
         {
             try
             {
-                Tire tireInDatabase = await _sqlServer.Tires.Where(t => t.TireId == tireToUpdate.TireId).FirstOrDefaultAsync();
+                Tire? tireInDatabase = await _sqlServer.Tires.Where(t => t.TireId == tireToUpdate.TireId).FirstOrDefaultAsync();
+
+                if (tireInDatabase == null)
+                {
+                    throw new Exception("There is no tire with that Id in the database");
+                }
 
                 if (tireInDatabase.TireModel != tireToUpdate.TireModel) { tireInDatabase.TireModel = tireToUpdate.TireModel; }
 
@@ -103,9 +142,9 @@ namespace Infrastructure.Repository.Tires
 
                 return await Task.FromResult(result.Entity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
     }

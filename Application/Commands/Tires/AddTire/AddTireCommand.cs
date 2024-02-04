@@ -1,9 +1,10 @@
-﻿using MediatR;
-using Application.Dtos;
+﻿using Application.Dtos;
+using Domain.Models.Tires;
+using MediatR;
 
 namespace Application.Commands.Tires.AddTire
 {
-    public class AddTireCommand : IRequest<Unit>
+    public class AddTireCommand : IRequest<Tire>
     {
         public AddTireCommand(TireDto newTire)
         {

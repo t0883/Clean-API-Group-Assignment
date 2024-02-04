@@ -79,7 +79,7 @@ namespace Infrastructure.Repository.Gearboxes
                 Gearbox? existingGearbox = await _sqlServer.GearBoxes.Where(g => g.GearboxId == gearboxToUpdate.GearboxId).FirstOrDefaultAsync();
                 if (existingGearbox == null)
                 {
-                    throw new ArgumentException($"Gearbox with Id {existingGearbox.GearboxId} does not exist in the database.");
+                    throw new ArgumentException($"Gearbox with Id {gearboxToUpdate.GearboxId} does not exist in the database.");
                 }
 
                 existingGearbox.GearboxModel = gearboxToUpdate.GearboxModel;
