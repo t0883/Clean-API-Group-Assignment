@@ -1,14 +1,10 @@
-﻿using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Dtos;
-using Domain.Models.Tires;
+﻿using Domain.Models.Tires;
 using Infrastructure.Repository.Tires;
+using MediatR;
 
 namespace Application.Commands.Tires.AddTire
 {
-    public class AddTireCommandHandler : IRequestHandler<AddTireCommand, Unit>
+    public class AddTireCommandHandler : IRequestHandler<AddTireCommand, Tire>
     {
         private readonly ITireRepository _tireRepository;
 
@@ -17,7 +13,7 @@ namespace Application.Commands.Tires.AddTire
             _tireRepository = tireRepository ?? throw new ArgumentNullException(nameof(tireRepository));
         }
 
-        public async Task<Unit> Handle(AddTireCommand request, CancellationToken cancellationToken)
+        public async Task<Tire> Handle(AddTireCommand request, CancellationToken cancellationToken)
         {
             var newTire = new Tire
             {
@@ -27,9 +23,9 @@ namespace Application.Commands.Tires.AddTire
                 TireTreadDepth = request.NewTire.TireTreadDepth
             };
 
-            await _tireRepository.AddTire(newTire);
+            var result = await _tireRepository.AddTire(newTire);
 
-            return Unit.Value;
+            return await Task.FromResult(result);
         }
     }
 }

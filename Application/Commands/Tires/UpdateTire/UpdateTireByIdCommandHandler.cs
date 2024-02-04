@@ -1,12 +1,10 @@
-﻿using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
-using Domain.Models.Tires;
+﻿using Domain.Models.Tires;
 using Infrastructure.Repository.Tires;
+using MediatR;
 
 namespace Application.Commands.Tires.UpdateTire
 {
-    public class UpdateTireByIdCommandHandler : IRequestHandler<UpdateTireByIdCommand, Unit>
+    public class UpdateTireByIdCommandHandler : IRequestHandler<UpdateTireByIdCommand, Tire>
     {
         private readonly ITireRepository _tireRepository;
 
@@ -15,7 +13,7 @@ namespace Application.Commands.Tires.UpdateTire
             _tireRepository = tireRepository;
         }
 
-        public async Task<Unit> Handle(UpdateTireByIdCommand request, CancellationToken cancellationToken)
+        public async Task<Tire> Handle(UpdateTireByIdCommand request, CancellationToken cancellationToken)
         {
             var updatedTire = new Tire
             {
@@ -26,9 +24,9 @@ namespace Application.Commands.Tires.UpdateTire
                 TireId = request.TireId
             };
 
-            await _tireRepository.UpdateTire(updatedTire);
+            var result = await _tireRepository.UpdateTire(updatedTire);
 
-            return Unit.Value;
+            return await Task.FromResult(result);
         }
     }
 }
