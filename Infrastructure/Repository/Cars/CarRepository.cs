@@ -79,5 +79,24 @@ namespace Infrastructure.Repository.Cars
                 throw;
             }
         }
+
+        public async Task<List<Car>> GetAllCars()
+        {
+            try
+            {
+                var result = await _sqlServer.Cars.Include(b => b.Brand).Include(e => e.Engine).Include(u => u.CreatedBy).Include(g => g.Gearbox).Include(s => s.Seat).Include(t => t.Tire).ToListAsync();
+
+                if (result.Count == 0)
+                {
+                    throw new Exception("There are no cars in the database.");
+                }
+
+                return await Task.FromResult(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
