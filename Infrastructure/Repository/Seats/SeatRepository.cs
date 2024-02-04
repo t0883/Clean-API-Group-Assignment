@@ -56,7 +56,7 @@ namespace Infrastructure.Repository.Seats
         {
             try
             {
-                return await Task.FromResult(await _sqlServer.Seats.ToListAsync());
+                return await Task.FromResult(await _sqlServer.Seats.Include(b => b.Brand).ToListAsync());
             }
             catch (Exception ex)
             {
@@ -68,12 +68,17 @@ namespace Infrastructure.Repository.Seats
         {
             try
             {
-                Seat? result = await _sqlServer.Seats.Where(t => t.SeatId == seatId).FirstOrDefaultAsync();
+                Seat? result = await _sqlServer.Seats.Include(b => b.Brand).Where(t => t.SeatId == seatId).FirstOrDefaultAsync();
+                if (result == null)
+                {
+                    throw new Exception($"There is no seat with Id {seatId} in the database.");
+                }
+
                 return await Task.FromResult(result);
             }
             catch (Exception ex)
             {
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
 
@@ -81,11 +86,19 @@ namespace Infrastructure.Repository.Seats
         {
             try
             {
-                return await Task.FromResult(await _sqlServer.Seats.Where(t => t.SeatName == seatName).ToListAsync());
+                var result = await _sqlServer.Seats.Where(t => t.SeatName == seatName).ToListAsync();
+
+                if (result == null)
+                {
+                    throw new Exception($"There are no seats with seatname {seatName} in the database");
+                }
+
+
+                return await Task.FromResult(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
 
@@ -93,7 +106,12 @@ namespace Infrastructure.Repository.Seats
         {
             try
             {
-                Seat seatInDatabase = await _sqlServer.Seats.Where(t => t.SeatId == seatToUpdate.SeatId).FirstOrDefaultAsync();
+                Seat? seatInDatabase = await _sqlServer.Seats.Where(t => t.SeatId == seatToUpdate.SeatId).FirstOrDefaultAsync();
+
+                if (seatInDatabase == null)
+                {
+                    throw new Exception($"There is no seat with Id {seatToUpdate.SeatId} in the database.");
+                }
 
                 if (seatInDatabase.SeatName != seatToUpdate.SeatName)
                 {
@@ -118,9 +136,9 @@ namespace Infrastructure.Repository.Seats
 
                 return await Task.FromResult(result.Entity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new ArgumentException(ex.Message);
+                throw;
             }
         }
 

@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Application.Commands.Cars.AddCar;
+using Application.Dtos;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.CarsController
@@ -13,5 +15,26 @@ namespace API.Controllers.CarsController
         {
             _mediator = mediator;
         }
+
+        [HttpPost]
+        [Route("addNewCar")]
+        public async Task<IActionResult> AddCar([FromBody] CarDto car)
+        {
+            try
+            {
+                return Ok(await _mediator.Send(new AddCarCommand(car)));
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
     }
+
 }
