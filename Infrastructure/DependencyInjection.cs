@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Repository.Brands;
+using Infrastructure.Repository.Cars;
 using Infrastructure.Repository.Engines;
 using Infrastructure.Repository.Engines.Interface;
 using Infrastructure.Repository.Gearboxes;
@@ -19,6 +20,7 @@ namespace Infrastructure
             services.AddScoped<ITireRepository, TireRepository>();
             services.AddScoped<IEngineRepository, EngineRepository>();
             services.AddScoped<ISeatRepository, SeatRepository>();
+            services.AddScoped<ICarRepository, CarRepository>();
             return services;
         }
     }
