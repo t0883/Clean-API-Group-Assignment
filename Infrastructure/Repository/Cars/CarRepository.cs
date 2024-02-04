@@ -80,6 +80,31 @@ namespace Infrastructure.Repository.Cars
             }
         }
 
+        public async Task<Car> DeleteCarById(Guid carId)
+        {
+            try
+            {
+                var carToDelete = await _sqlServer.Cars.Where(c => c.CarId == carId).FirstOrDefaultAsync();
+
+                if (carToDelete == null)
+                {
+                    throw new Exception($"There is no car with Id {carId} in the database.");
+                }
+
+
+                _sqlServer.Remove(carToDelete);
+
+                await _sqlServer.SaveChangesAsync();
+
+                return await Task.FromResult(carToDelete);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<List<Car>> GetAllCars()
         {
             try

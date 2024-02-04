@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Cars.AddCar;
+using Application.Commands.Cars.DeleteCar;
 using Application.Dtos;
 using Application.Queries.Cars.GetAll;
 using MediatR;
@@ -43,6 +44,22 @@ namespace API.Controllers.CarsController
             catch (Exception ex)
             {
                 return NotFound(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("deleteCarById/{carId}")]
+        public async Task<IActionResult> DeleteCarById(Guid carId)
+        {
+            try
+            {
+                await _mediator.Send(new DeleteCarByIdCommand(carId));
+
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return NoContent();
             }
         }
 
