@@ -6,6 +6,7 @@ namespace Infrastructure.Repository.Cars
     {
         Task<Car> AddCar(Car car);
         Task<List<Car>> GetAllCars();
+        Task<Car> DeleteCarById(Guid carId);
 
     }
 }
