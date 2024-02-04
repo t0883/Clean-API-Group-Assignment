@@ -1,4 +1,5 @@
-﻿using Infrastructure.Repository.Brands;
+﻿using Infrastructure.EmailService;
+using Infrastructure.Repository.Brands;
 using Infrastructure.Repository.Cars;
 using Infrastructure.Repository.Engines;
 using Infrastructure.Repository.Engines.Interface;
@@ -21,6 +22,7 @@ namespace Infrastructure
             services.AddScoped<IEngineRepository, EngineRepository>();
             services.AddScoped<ISeatRepository, SeatRepository>();
             services.AddScoped<ICarRepository, CarRepository>();
+            services.AddSingleton<SendGridEmailService>();
             return services;
         }
     }

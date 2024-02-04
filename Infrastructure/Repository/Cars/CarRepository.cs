@@ -6,6 +6,7 @@ using Domain.Models.Seats;
 using Domain.Models.Tires;
 using Domain.Models.Users;
 using Infrastructure.Database.SqlDatabase;
+using Infrastructure.EmailService;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository.Cars
@@ -13,10 +14,12 @@ namespace Infrastructure.Repository.Cars
     public class CarRepository : ICarRepository
     {
         private readonly SqlServer _sqlServer;
+        private readonly SendGridEmailService _sendGridEmailService;
 
-        public CarRepository(SqlServer sqlServer)
+        public CarRepository(SqlServer sqlServer, SendGridEmailService sendGridEmailService)
         {
             _sqlServer = sqlServer;
+            _sendGridEmailService = sendGridEmailService;
         }
 
         public async Task<Car> AddCar(Car car)
@@ -68,7 +71,10 @@ namespace Infrastructure.Repository.Cars
 
                 var result = _sqlServer.Cars.Add(carToCreate);
 
+
                 await _sqlServer.SaveChangesAsync();
+
+                await _sendGridEmailService.SendEmail(userToConnect, carToCreate);
 
                 return await Task.FromResult(result.Entity);
 

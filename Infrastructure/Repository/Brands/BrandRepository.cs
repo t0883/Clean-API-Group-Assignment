@@ -27,6 +27,7 @@ namespace Infrastructure.Repository.Brands
 
                 await _sqlServer.SaveChangesAsync();
 
+
                 return await Task.FromResult(result.Entity);
 
             }
